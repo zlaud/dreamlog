@@ -1,5 +1,8 @@
+import {Navbar} from "@/app/components/Navbar";
+
 const Home = () => {
-  return <div> Today</div>;
+  return <Navbar />;
+  //<div> Today</div>;
 };
 
 export default Home;
