@@ -14,10 +14,16 @@ const MonthNavigator = () => {
   };
 
   return (
-    <div>
+    <div className="flex">
+      <button onClick={handlePreviousMonth} className="px-2">
+        {" "}
+        {"<"}
+      </button>
       <h2>{date.format("MMMM YYYY")}</h2>
-      <button onClick={handlePreviousMonth}>Previous</button>
-      <button onClick={handleNextMonth}>Next</button>
+
+      <button onClick={handleNextMonth} className="px-2">
+        {">"}
+      </button>
     </div>
   );
 };
