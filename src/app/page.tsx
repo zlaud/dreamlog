@@ -1,7 +1,13 @@
-import {Navbar} from "@/app/components/Navbar";
+import { Navbar } from "@/components/Navbar";
+import MonthNavigator from "@/components/MonthNavigator";
 
 const Home = () => {
-  return <Navbar />;
+  return (
+    <div>
+      <Navbar />
+      <MonthNavigator />
+    </div>
+  );
   //<div> Today</div>;
 };
 
