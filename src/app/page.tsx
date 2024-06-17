@@ -1,9 +1,10 @@
 "use client";
-import { Navbar } from "@/components/Navbar";
+import { Navbar } from "@/components/navbar/Navbar";
 import { onAuthStateChanged } from "firebase/auth";
 import Log from "@/components/Log";
 import { auth } from "@/lib/firebase";
 import { useState, useEffect } from "react";
+import styles from '@/components/navbar/Navbar.module.css';
 
 interface User {
   uid: string;
@@ -11,6 +12,7 @@ interface User {
 
 const Home = () => {
   const [user, setUser] = useState<User | null>(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
@@ -25,11 +27,15 @@ const Home = () => {
     return () => unsubscribe(); // Cleanup function to unsubscribe from auth state listener
   }, []);
 
+  const handleSidebarToggle = (isOpen: boolean) => {
+    setIsSidebarOpen(isOpen);
+  };
+
   if (user) {
     return (
       <div>
-        <Navbar />
-        <div className="relative left-16 w-[calc(100%_-_4rem)]">
+        <Navbar onSidebarToggle={handleSidebarToggle}  />
+        <div className={`relative left-16 w-[calc(100%_-_4rem)] ${styles.content} ${isSidebarOpen ? styles.contentShift : ''}`}>
           <Log />
         </div>
       </div>
