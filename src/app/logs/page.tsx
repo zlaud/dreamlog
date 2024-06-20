@@ -4,7 +4,7 @@ import { db, auth } from "@/lib/firebase.js";
 import { collection, getDoc, getDocs } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter } from "next/navigation";
-import nookies from "nookies";
+import MonthNavigator from "@/components/MonthNavigator";
 
 const Logs = () => {
   const [user, loading, error] = useAuthState(auth);
@@ -17,13 +17,7 @@ const Logs = () => {
         router.push("/login");
         return;
       }
-      //   const cookies = nookies.get(undefined);
-      //   const token = cookies.token;
-      //   console.log(token);
-      //   if (!token) {
-      //     router.push("/login");
-      //     return;
-      //   }
+
       try {
         console.log("Fetching user posts...");
         const userPosts = await getDocs(collection(db, "posts"));
@@ -47,8 +41,8 @@ const Logs = () => {
       {loading && <div>Loading...</div>}
       {user && (
         <div>
-          {" "}
-          <h1>Your Posts</h1>
+          <h1>Dream Log</h1>
+          <MonthNavigator />
           {logs.length === 0 ? (
             <p>No posts found</p>
           ) : (

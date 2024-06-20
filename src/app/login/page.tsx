@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
-import nookies from "nookies";
 
 const Login = () => {
   const [email, setEmail] = useState<string>("");
@@ -14,10 +13,8 @@ const Login = () => {
   const router = useRouter();
 
   useEffect(() => {
-    const cookies = nookies.get(undefined);
-    const token = cookies.token;
-    console.log(token);
-    if (token) {
+    const user = auth.currentUser;
+    if (user) {
       router.push("/logs");
       return;
     }
@@ -31,9 +28,6 @@ const Login = () => {
         email,
         password
       );
-
-      const token = await userCredential.user.getIdToken();
-      nookies.set(undefined, "token", token, { path: "/" });
 
       console.log("User logged in:", userCredential.user);
       setEmail("");
