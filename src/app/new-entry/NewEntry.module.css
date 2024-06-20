@@ -42,8 +42,6 @@
 .description textarea {
     width: 100%;
     padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 20px;
     height: 200px;
     min-width: 100%;
     min-height: 100px;
