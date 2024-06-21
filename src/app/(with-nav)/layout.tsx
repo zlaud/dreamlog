@@ -16,24 +16,24 @@ export const metadata: Metadata = {
   description: "Log your dreams",
 };
 
-export default function RootLayout({
+export default function Layout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
+    <>
+      <div
         className={cn(
           "min-h-screen bg-background font-sans antialiased",
           fontSans.variable
         )}
       >
-        <main className="app flex">
+        <div className="app flex">
           <Navbar />
           {children}
-        </main>
-      </body>
-    </html>
+        </div>
+      </div>
+    </>
   );
 }

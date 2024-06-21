@@ -28,7 +28,6 @@ export default function RootLayout({
           fontSans.variable
         )}
       >
-        <div className="main"></div>
         <main className="app">{children}</main>
       </body>
     </html>
