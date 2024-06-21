@@ -6,27 +6,26 @@ import Link from "next/link";
 import { signOut } from "firebase/auth";
 import styles from "./Navbar.module.css";
 import { auth } from "@/lib/firebase";
-type NavbarProps = {
-  onSidebarToggle: (isOpen: boolean) => void;
-};
+import { useRouter } from "next/navigation";
 
-export const Navbar = ({ onSidebarToggle }: NavbarProps) => {
+export const Navbar = () => {
+  const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  // const toggleSidebar = () => {
-  //     setIsSidebarOpen(!isSidebarOpen);
-  //
-  // };
-
   const toggleSidebar = () => {
-    const newState = !isSidebarOpen;
-    setIsSidebarOpen(newState);
-    onSidebarToggle(newState); // Notify parent component of the sidebar state change
+    setIsSidebarOpen(!isSidebarOpen);
   };
+
+  // const toggleSidebar = () => {
+  //   const newState = !isSidebarOpen;
+  //   setIsSidebarOpen(newState);
+  //   onSidebarToggle(newState); // Notify parent component of the sidebar state change
+  // };
 
   const handleSignOut = async () => {
     try {
       await signOut(auth);
+      router.push("/login");
     } catch (error) {
       console.error("Error signing out: ", error);
     }
