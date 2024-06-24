@@ -6,8 +6,9 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-}
 
+}
+/* ----------------Navbar -------------*/
 .navbar {
     display: flex;
     justify-content: space-between;
@@ -25,54 +26,94 @@
     gap: 1rem;
 }
 
-.loginButton,
-.signupButton {
+.loginButton{
     padding: 0.5rem 1rem;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     font-size: 1rem;
-}
-
-.loginButton {
     background-color: #0070f3;
     color: white;
 }
+/* ----------------header -------------*/
 
-.signupButton {
-    background-color: #48bb78;
-    color: white;
-}
-
-.mainContent {
+.header {
     padding: 5rem 2rem;
 }
 
-.mainContent h1 {
+.header h1 {
     font-size: 2.5rem;
     margin-bottom: 2rem;
 }
 
-.arrowContainer {
-    margin-top: 2rem;
+.header p {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
 }
+
+.hsb{
+    margin-bottom: 2rem;
+    font-weight: bold;
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: font-size 0.3s  ease;
+    background-color: #48bb78;
+}
+
+.hsb:hover {
+    transition: font-size 0.3s  ease;
+    font-size: 1.3rem;
+}
+
+/* ---------------- arrow -------------*/
 
 .arrow {
-    font-size: 2rem;
+    font-size: 1.5rem;
     animation: bounce 2s infinite;
 }
+/* ---------------- features -------------*/
 
-@keyframes bounce {
-    0%, 100% {
-        transform: translateY(2px);
-    }
-    50% {
-        transform: translateY(50px);
-    }
+.features {
+    padding:80px 0;
 }
 
+.tabTitles {
+    display: flex;
+    justify-content: space-around; /* Space the tabs evenly */
+    gap: 10px; /* Adjust the gap between tabs */
+    margin-bottom: 20px;
+}
+.tabLinks {
+    cursor: pointer;
+    padding: 10px;
+    border-bottom: 2px solid transparent;
+    transition: border-bottom 0.3s, color 0.3s;
+}
+.activeLink {
+    border-bottom: 2px solid #48bb78; /* Change border color to #48bb78 */
+    color: #48bb78;
+}
+
+.tabContents {
+    display: flex;
+    justify-content: center;
+}
+.tabContent {
+    padding: 10px;
+}
+.image {
+    margin-top: 2rem;
+    height: auto;
+    margin-right: 10px;
+    width: 800px
+
+}
 .secondaryContent {
     padding: 3rem 2rem;
+    animation: fadeInUp 1.5s ease-out;
 }
 
 .secondaryContent p {
@@ -88,14 +129,101 @@
 
 .ctaButton {
     padding: 0.75rem 1.5rem;
-    background-color: #0070f3;
+    background: linear-gradient(45deg, #5f2dd2, #8350ce);
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 16px;
     cursor: pointer;
     font-size: 1rem;
 }
 
 .ctaButton:hover {
-    background-color: #005bb5;
+    background: linear-gradient(45deg, #8350ce, #5f2dd2);
+    transform: translateY(-5px);
+    animation: wave 0.5s infinite;
 }
+
+.cloud {
+    position: absolute;
+    top: 50%; /* Adjust this value to position clouds further down */
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    pointer-events: none; /* Ensure clouds don't interfere with clicking */
+    z-index: 10; /* Ensure clouds are above other content */
+}
+
+.cloud1, .cloud2 {
+    transition: transform 0.5s ease; /* Smooth transition for movement */
+}
+
+.cloud1 {
+    left: 0;
+}
+
+.cloud2 {
+    right: 0;
+}
+
+
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(10px);
+    }
+}
+@keyframes bounceSide {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    50% {
+        transform: translateX(10px);
+    }
+}
+@keyframes wave {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+/*.cloud {*/
+/*    position: absolute;*/
+/*    top: 50%;*/
+/*    width: 100%;*/
+/*    display: flex;*/
+/*    justify-content: space-between;*/
+/*    pointer-events: none;*/
+/*    z-index: 10;*/
+/*}*/
+
+/*.cloud img {*/
+/*    max-width: 50%;*/
+/*    height: auto;*/
+/*}*/
+
+/*.cloud1 {*/
+/*    left: 0;*/
+/*    transition: transform 0.5s ease; !* Smooth transition for movement *!*/
+/*}*/
+
+/*.cloud2 {*/
+/*    right: 0;*/
+/*    transition: transform 0.5s ease; !* Smooth transition for movement *!*/
+/*}*/
+/* Cloud positioning */
