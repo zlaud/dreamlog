@@ -2,7 +2,6 @@
     text-align: center;
     color: #fff;
     background: linear-gradient(to bottom, #3B497B, #26436E, #182744);
-    min-height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;

@@ -1,67 +1,73 @@
-.newEntry {
+
+.page {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 2rem;
-    background-color: #f0f0f0;
-    min-height: 100vh;
+    justify-content: center;
+    width: 100%;
+    color: #ffffff;
+    background: linear-gradient(to bottom, #3B497B, #26436E, #182744);
 
 }
 
-.createNewEntry {
-    display: flex;
+.newEntry {
+    flex: 0.5;
     flex-direction: column;
-    width: 60%;
     margin: 0 auto;
     padding: 20px;
     border-radius: 8px;
 }
 
-
-.header {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-
-.title {
-    position: relative;
-    margin-bottom: 16px;
-
+.newEntry h1 {
+    text-align: left;
+    font-size: 28px;
 }
 
 .title input {
-    width: 100%;
     padding: 8px;
     border: none;
-    border-radius: 4px;
     background-color: transparent;
     outline: none;
 }
+.description{
+    background: rgba(255,255,255,0.2);
+    /*border-width: 1px;*/
+    /*border-style: solid;*/
+    /*border-color: rgba(255, 255, 255, 0.8);*/
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
 
 .description textarea {
-    width: 100%;
     padding: 8px;
     height: 200px;
     min-width: 100%;
     min-height: 100px;
     max-width: 100%;
     outline: none;
-    border: none;
+    background-color: transparent;
     resize: none;
+
 }
 
-.detailsHeader {
+/* ----------------Details -------------*/
+
+.details h1 {
+    font-size: 21px;
     margin-bottom: 1rem;
-}
-.details {
-    display: flex;
-    flex-direction: column;
 }
 
 .detailItem {
-    margin-bottom: 16px; /* Add margin bottom to create space between items */
-    background-color: #cccccc;
+    margin-bottom: 16px;
+    background: rgba(255,255,255,0.2);
+    /*background-color: transparent;*/
+    /*border-width: 1px;*/
+    /*border-style: solid;*/
+    /*border-color: rgba(255, 255, 255, 0.5);*/
+    border-radius: 8px;
+}
+
+.detailItem label {
+    color: rgba(255, 255, 255, 0.8);
+    padding: 8px;
 }
 
 .detailItem select,
@@ -71,5 +77,37 @@
     border: none;
     background-color: transparent;
     outline: none;
-    border-radius: 4px;
+}
+
+
+
+.submitButton::before {
+    content:"";
+    position: absolute;
+    width: 10%;
+    height: 10%;
+    background: #000;
+    transition: transform 0.5s;
+    transform-origin: 0 0;
+    transition-timing-function: cubic-bezier(0.5, 1.6, 0.4, 0.7);
+    transform: scaleX(0);
+}
+
+.submitButton:hover::before {
+    transform: scaleX(1);
+    color: #ffffff;
+}
+
+.emojiPickerContainer {
+    position: relative;
+    display: inline-block;
+}
+.emojiPicker {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 5px;
 }
