@@ -4,6 +4,7 @@ import { db, auth } from "@/lib/firebase.js";
 import { collection, getDoc, getDocs } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter } from "next/navigation";
+import Link from 'next/link';
 import MonthNavigator from "@/components/MonthNavigator";
 
 const Logs = () => {
@@ -11,6 +12,7 @@ const Logs = () => {
   console.log(user);
   const [logs, setLogs] = useState<any[]>([]);
   const router = useRouter();
+
   useEffect(() => {
     const fetchLogs = async () => {
       if (!user) {
@@ -20,7 +22,8 @@ const Logs = () => {
 
       try {
         console.log("Fetching user posts...");
-        const userPosts = await getDocs(collection(db, "posts"));
+        const userPostsCollectionRef = collection(db, `users/${user.uid}/logs`);
+        const userPosts = await getDocs(userPostsCollectionRef);
         const postsData = userPosts.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
@@ -46,11 +49,21 @@ const Logs = () => {
           {logs.length === 0 ? (
             <p>No posts found</p>
           ) : (
-            <ul>
-              {logs.map((log) => (
-                <li key={log.id}>{log.title}</li>
-              ))}
-            </ul>
+              <ul>
+                {logs.map((log) => (
+                    <li key={log.id}>
+                      <Link href={`/logs/${log.id}`}>
+                        {log.title}
+                      </Link>
+                    </li>
+                ))}
+              </ul>
+            //
+            // <ul>
+            //   {logs.map((log) => (
+            //     <li key={log.id}>{log.title}</li>
+            //   ))}
+            // </ul>
           )}
         </div>
       )}

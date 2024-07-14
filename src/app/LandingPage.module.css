@@ -144,12 +144,15 @@
 
 .cloud {
     position: absolute;
-    top: 50%; /* Adjust this value to position clouds further down */
+    top: 50%;
+    font-size: 100rem;
     width: 100%;
     display: flex;
     justify-content: space-between;
-    pointer-events: none; /* Ensure clouds don't interfere with clicking */
-    z-index: 10; /* Ensure clouds are above other content */
+    pointer-events: none;
+    z-index: 10;
+    bottom: 0px;
+    height: 19rem;
 }
 
 .cloud1, .cloud2 {

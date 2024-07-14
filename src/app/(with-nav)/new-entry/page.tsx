@@ -7,7 +7,7 @@ import {auth, db} from "@/lib/firebase";
 import { useRouter } from "next/navigation";
 import EmojiPicker, { EmojiClickData } from 'emoji-picker-react';
 import styles from "./NewEntry.module.css";
-import {User} from "next-auth";
+import { User as FirebaseUser } from "firebase/auth";
 
 const NewEntry = () => {
   const [title, setTitle] = useState("");
@@ -20,11 +20,22 @@ const NewEntry = () => {
 
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
   const [selectedEmojis, setSelectedEmojis] = useState<string[]>([]);
-  const [user, setUser] = useState<User | null>(null);
-
+  const [user, setUser] = useState<FirebaseUser | null>(null);
   const router = useRouter();
 
   const postsCollectionRef = collection(db, "posts");
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+      } else {
+        router.push("/login"); // Redirect to login if not authenticated
+      }
+    });
+
+    return () => unsubscribe();
+  }, [router]);
 
 
   const createPost = async () => {
@@ -32,8 +43,8 @@ const NewEntry = () => {
       alert("You need to be logged in to create a post");
       return;
     }
-
-    await addDoc(postsCollectionRef, {
+    const userPostsCollectionRef = collection(db, `users/${user.uid}/logs`);
+    await addDoc(userPostsCollectionRef, {
       title,
       description,
       dreamType,
@@ -41,17 +52,14 @@ const NewEntry = () => {
       emotions,
       people,
       places,
-
+      createdAt: new Date(), // Timestamp for when the post was created
+      author: {
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName, // Include displayName if available
+      },
     });
-    router.push("/");
-  };
-
-  const handleEmojiClick = (emojiObject: EmojiClickData) => {
-    const emoji = emojiObject.emoji;
-    setSelectedEmojis([...selectedEmojis, emoji]);
-  };
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedEmojis(e.target.value.split(' '));
+    router.push("/logs");
   };
 
   return (
@@ -105,11 +113,9 @@ const NewEntry = () => {
                 <input
                     type="text"
                     placeholder="Emotions"
-                    value={places}
-                    onChange={handleInputChange}
-                    // onChange={(e) => setEmotions(e.target.value)}
+                    value={emotions}
+                    onChange={(e)=> setEmotions(e.target.value)}
                 />
-                {/*<button onClick={() => setIsEmojiPickerOpen(!isEmojiPickerOpen)}>+</button>*/}
               </div>
 
               <div className={styles.detailItem}>
@@ -136,12 +142,6 @@ const NewEntry = () => {
 
             <button className={styles.submitButton} onClick={createPost}>Submit Dream</button>
           </div>
-
-          {isEmojiPickerOpen && (
-              <div className={styles.emojiPicker}>
-                <EmojiPicker onEmojiClick={handleEmojiClick} />
-              </div>
-          )}
         </div>
   );
 };
