@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import "@/styles/globals.css";
-
 import { Karla as FontSans } from "next/font/google";
-
 import { cn } from "@/lib/utils";
 import { Navbar } from "@/components/navbar/Navbar";
+import BGCloud1 from '@/components/icons/BGCloud1';
+import styles from "@/app/(with-nav)/Layout.module.css";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -33,6 +33,9 @@ export default function Layout({
           <Navbar />
           {children}
         </div>
+        <BGCloud1 className={`${styles.bgcloud} ${styles.bgcloud1}`} />
+        <BGCloud1 className={`${styles.bgcloud} ${styles.bgcloud2}`} />
+        <BGCloud1 className={`${styles.bgcloud} ${styles.bgcloud3}`} />
       </div>
     </>
   );

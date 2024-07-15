@@ -83,62 +83,57 @@ const NewEntry = () => {
             </div>
 
             {/* Details section */}
-            <div className={styles.details}>
-              <h1>Details</h1>
-              <div className={styles.detailItem}>
-                <label>Dream Type:</label>
-                <select
-                    value={dreamType}
-                    onChange={(e) => setDreamType(e.target.value)}
-                >
-                  <option value="Regular Dream">Regular Dream</option>
-                  <option value="Nightmare">Nightmare</option>
-                </select>
-              </div>
-
-              <div className={styles.detailItem}>
-                <label>Dream Length (1-5):</label>
-                <input
-                    type="number"
-                    value={dreamLength}
-                    onChange={(e) => setDreamLength(parseInt(e.target.value))}
-                    min={1}
-                    max={5}
-                    required
-                />
-              </div>
-
-              <div className={styles.detailItem}>
-                <label>Emotions:</label>
-                <input
-                    type="text"
-                    placeholder="Emotions"
-                    value={emotions}
-                    onChange={(e)=> setEmotions(e.target.value)}
-                />
-              </div>
-
-              <div className={styles.detailItem}>
-                <label>People:</label>
-                <input
-                    type="text"
-                    placeholder="People"
-                    value={people}
-                    onChange={(e) => setPeople(e.target.value)}
-                />
-              </div>
-
-              <div className={styles.detailItem}>
-                <label>Places:</label>
-                <input
-                    type="text"
-                    placeholder="Places"
-                    value={places}
-                    onChange={(e) => setPlaces(e.target.value)}
-                />
-              </div>
-            </div>
-
+              <ul>
+                <h1>Details</h1>
+                <li>
+                  <label>Dream Type:</label>
+                  <select
+                      value={dreamType}
+                      onChange={(e) => setDreamType(e.target.value)}
+                  >
+                    <option value="Regular Dream">Regular Dream</option>
+                    <option value="Nightmare">Nightmare</option>
+                  </select>
+                </li>
+                <li>
+                  <label>Dream Length (1-5):</label>
+                  <input
+                      type="number"
+                      value={dreamLength}
+                      onChange={(e) => setDreamLength(parseInt(e.target.value))}
+                      min={1}
+                      max={5}
+                      required
+                  />
+                </li>
+                <li>
+                  <label>Emotions:</label>
+                  <input
+                      type="text"
+                      placeholder="Emotions"
+                      value={emotions}
+                      onChange={(e)=> setEmotions(e.target.value)}
+                  />
+                </li>
+                <li>
+                  <label>People:</label>
+                  <input
+                      type="text"
+                      placeholder="People"
+                      value={people}
+                      onChange={(e) => setPeople(e.target.value)}
+                  />
+                </li>
+                <li>
+                  <label>Places:</label>
+                  <input
+                      type="text"
+                      placeholder="Places"
+                      value={places}
+                      onChange={(e) => setPlaces(e.target.value)}
+                  />
+                </li>
+              </ul>
 
             <button className={styles.submitButton} onClick={createPost}>Submit Dream</button>
           </div>

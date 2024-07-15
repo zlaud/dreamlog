@@ -16,12 +16,6 @@ export const Navbar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  // const toggleSidebar = () => {
-  //   const newState = !isSidebarOpen;
-  //   setIsSidebarOpen(newState);
-  //   onSidebarToggle(newState); // Notify parent component of the sidebar state change
-  // };
-
   const handleSignOut = async () => {
     try {
       await signOut(auth);

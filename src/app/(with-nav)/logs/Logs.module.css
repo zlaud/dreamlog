@@ -1,0 +1,44 @@
+
+.page {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+
+}
+.logs {
+    flex-direction: column;
+    width: 80%;
+    margin-top: 5%;
+}
+.logs h1{
+    font-size: 2rem;
+}
+
+.logs li, .searchbar{
+    background: rgba(255,255,255,0.2);
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+.sortButton {
+    float: right;
+}
+
+.logs li{
+    display: flex;
+    align-items: center;
+    height: 72px;
+}
+.details{
+    display: flex;
+    align-items: center;
+}
+.title, .createdAt{
+    display: inline-block;
+    padding: 0.5rem;
+    text-align: center;
+}
+.createdAt {
+    width: 3rem;
+
+}

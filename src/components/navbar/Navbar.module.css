@@ -54,8 +54,8 @@
 .sidebar ul {
   padding: 0;
   display: flex;
-  flex-direction: column; /* Stack items vertically */
-  height: 100%; /* Ensure the ul fills the sidebar height */
+  flex-direction: column;
+  height: 100%;
   justify-content: flex-start;
 }
 
@@ -63,11 +63,11 @@
   position: relative;
   list-style-type: none;
   height: 50px;
-  width: 100%; /* Ensure the list item spans the full width */
+  width: 100%;
   display: flex;
   align-items: center;
-  justify-content: center; /* Center items horizontally */
-  margin: 0.8rem 0; /* Adjust margin as needed */
+  justify-content: center;
+  margin: 0.8rem 0;
 
   transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
 }
@@ -77,14 +77,14 @@
   color: #fff;
   display: flex;
   align-items: center;
-  justify-content: left; /* Center the content */
+  justify-content: left;
   text-decoration: none;
   border-radius: 0.8rem;
-  background: none; /* Ensure the background is transparent */
-  border: none; /* Remove the default button border */
+  background: none;
+  border: none;
   cursor: pointer;
-  width: 100%; /* Make sure it spans the full width */
-  height: 100%; /* Make sure it spans the full height */
+  width: 100%;
+  height: 100%;
 }
 
 .sidebar ul li a:hover,
@@ -101,8 +101,8 @@
   border-radius: 12px;
   line-height: 50px;
   display: flex;
-  align-items: center; /* Align items vertically */
-  justify-content: center; /* Align items horizontally */
+  align-items: center;
+  justify-content: center;
 
   transition: left 0.3s ease-in-out;
 }

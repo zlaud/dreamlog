@@ -5,15 +5,25 @@ import { collection, getDoc, getDocs } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter } from "next/navigation";
 import Link from 'next/link';
+import styles from './Logs.module.css';
 import MonthNavigator from "@/components/MonthNavigator";
 
 const Logs = () => {
   const [user, loading, error] = useAuthState(auth);
-  console.log(user);
   const [logs, setLogs] = useState<any[]>([]);
-  const router = useRouter();
 
-  useEffect(() => {
+  const [filteredLogs, setFilteredLogs] = useState<any[]>([]);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+
+  const router = useRouter();
+  let date = new Date().toDateString();
+  const formatDate = (date: Date) => {
+    const options = { month: "short", day: "numeric" } as const;
+    return date.toLocaleDateString(undefined, options);
+  };
+
+    useEffect(() => {
     const fetchLogs = async () => {
       if (!user) {
         router.push("/login");
@@ -22,13 +32,19 @@ const Logs = () => {
 
       try {
         console.log("Fetching user posts...");
-        const userPostsCollectionRef = collection(db, `users/${user.uid}/logs`);
-        const userPosts = await getDocs(userPostsCollectionRef);
-        const postsData = userPosts.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
+        const userPosts = await getDocs(collection(db, `users/${user.uid}/logs`));
+        const postsData = userPosts.docs.map((doc) => {
+          const data = doc.data();
+          return {
+            id: doc.id,
+            ...data,
+            createdAt: data.createdAt ? data.createdAt.toDate() : null
+          };
+        });
+        postsData.sort((a, b) => (b.createdAt ? b.createdAt - a.createdAt : 1));
+
         setLogs(postsData);
+        setFilteredLogs(postsData);
       } catch (error) {
         console.error("Error fetching data", error);
       }
@@ -39,36 +55,104 @@ const Logs = () => {
     }
   }, [user, loading, router]);
 
+
+  useEffect(() => {
+    handleSearch(searchQuery); // Update filtered logs based on search query
+  }, [logs, searchQuery, sortOrder]);
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    let filtered = logs.filter((log) =>
+        log.title.toLowerCase().includes(query.toLowerCase())
+    );
+
+    filtered.sort((a, b) => {
+      if (sortOrder === "asc") {
+        return a.createdAt - b.createdAt;
+      } else {
+        return b.createdAt - a.createdAt;
+      }
+    });
+
+    setFilteredLogs(filtered);
+  };
+
+  const handleSortOrderChange = (order: "asc" | "desc") => {
+    setSortOrder(order);
+  };
+
+
+
   return (
-    <div>
-      {loading && <div>Loading...</div>}
-      {user && (
-        <div>
-          <h1>Dream Log</h1>
-          <MonthNavigator />
-          {logs.length === 0 ? (
-            <p>No posts found</p>
-          ) : (
-              <ul>
-                {logs.map((log) => (
-                    <li key={log.id}>
-                      <Link href={`/logs/${log.id}`}>
-                        {log.title}
-                      </Link>
-                    </li>
-                ))}
-              </ul>
-            //
-            // <ul>
-            //   {logs.map((log) => (
-            //     <li key={log.id}>{log.title}</li>
-            //   ))}
-            // </ul>
-          )}
+
+      <div className={styles.page}>
+
+
+
+        <div className={styles.logs}>
+          <h1>LOGS</h1>
+          <div className={styles.date}>
+            {date}
+          </div>
+          <div className={styles.filter}>
+            <input className={styles.searchbar}
+                   type="text"
+                   placeholder="Search by title"
+                   value={searchQuery}
+                   onChange={(e) => handleSearch(e.target.value)}
+            />
+
+            <button className={styles.sortButton} onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}>
+              Sort by {sortOrder === "asc" ? "newest" : "oldest"}
+            </button>
+          </div>
+
+          <ul>
+            {filteredLogs.map((log) => (
+                <li key={log.id}>
+                  <Link href={`/logs/${log.id}`}>
+                  <div className={styles.details}>
+
+                      <div className={styles.createdAt}>
+                        {formatDate(log.createdAt)}
+                      </div>
+                      <div className={styles.title}>{log.title}</div>
+                  </div>
+                  </Link>
+
+                </li>
+            ))}
+          </ul>
         </div>
-      )}
-    </div>
-  );
+      </div>
+  )
+
+  // return (
+  //   <div>
+  //     {loading && <div>Loading...</div>}
+  //     {user && (
+  //       <div className={styles.logs}>
+  //         <h1>LOGS</h1>
+  //         <MonthNavigator />
+  //         {logs.length === 0 ? (
+  //           <p>No posts found</p>
+  //         ) : (
+  //             <div className={styles.list}>
+  //               <ul >
+  //                 {logs.map((log) => (
+  //                     <li key={log.id}>
+  //                       <Link href={`/logs/${log.id}`}>
+  //                         {log.title}
+  //                       </Link>
+  //                     </li>
+  //                 ))}
+  //               </ul>
+  //             </div>
+  //         )}
+  //       </div>
+  //     )}
+  //   </div>
+  // );
 };
 
 export default Logs;

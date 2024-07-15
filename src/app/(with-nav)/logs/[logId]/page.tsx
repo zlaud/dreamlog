@@ -4,6 +4,7 @@ import {usePathname, useRouter} from "next/navigation"; // Import useRouter from
 import { db, auth } from "@/lib/firebase.js";
 import { doc, getDoc } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
+import styles from '../../new-entry/NewEntry.module.css';
 
 const ViewLog = () => {
     const router = useRouter(); // Use useRouter hook
@@ -42,18 +43,39 @@ const ViewLog = () => {
     if (!log) {
         return <div>Loading log...</div>; // Handle case where log is still loading
     }
+    const handleEdit = () => {
+        router.push(`${logId}/edit`);
+    };
 
     return (
-        <div>
-            <h1>{log.title}</h1>
-            <p>{log.description}</p>
-            <p>Dream Type: {log.dreamType}</p>
-            <p>Dream Length: {log.dreamLength}</p>
-            <p>Emotions: {log.emotions}</p>
-            <p>People: {log.people}</p>
-            <p>Places: {log.places}</p>
-            <p>Created At: {log.createdAt?.toDate().toString()}</p>
-            <p>Author: {log.author.displayName || log.author.email}</p>
+        <div className={styles.page}>
+            <div className={styles.viewEntry}>
+                <h1>{log.title}</h1>
+                <div className={styles.viewDescription}>{log.description}</div>
+
+                {/* Details section */}
+                <ul className={styles.viewDetails}>
+                    <h1>Details</h1>
+                    <li>
+                        <p>Dream Type: {log.dreamType}</p>
+                    </li>
+                    <li>
+                        <p>Dream Length: {log.dreamLength}</p>
+                    </li>
+                    <li>
+                        <p>Emotions: {log.emotions}</p>
+                    </li>
+                    <li>
+                        <p>People: {log.people}</p>
+                    </li>
+                    <li>
+                        <p>Places: {log.places}</p>
+                    </li>
+                </ul>
+                <button onClick={handleEdit}>Edit</button>
+                <p>Created At: {log.createdAt?.toDate().toString()}</p>
+                <p>Author: {log.author.displayName || log.author.email}</p>
+            </div>
         </div>
     );
 };

@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
+import styles from './Login.module.css';
 
 const Login = () => {
   const [email, setEmail] = useState<string>("");
@@ -42,14 +43,14 @@ const Login = () => {
     <div>
       {loading && <div>Loading...</div>}
       {!loading && (
-        <div>
-          <Input
+        <div >
+          <Input className={styles.inputs}
             type="email"
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-          <Input
+          <Input className={styles.inputs}
             type="password"
             placeholder="Password"
             value={password}
