@@ -1,23 +1,31 @@
 .sidebar {
-  position: relative;
+  position: fixed;
   top: 0;
   left: 0;
-  height: 100vh;
   width: 80px;
-  background-color: #2d3748;
+  height: 100vh;
+  background-color: #1e2b58;
   padding: 0.4rem 0.8rem;
   transition: all 0.5s ease;
   z-index: 10;
+  display: flex;
+  flex-flow: column;
+  flex-grow : 1;
 }
 
 .sidebarOpen {
   width: 250px;
 }
+.top {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1rem;
+}
 
 .menuButton {
   position: absolute;
-  color: #fff;
-  top: 0.4rem;
+  top: 1rem;
   left: 50%;
   font-size: 1.2rem;
   line-height: 50px;
@@ -30,11 +38,9 @@
   left: 90%;
 }
 
-.sidebar .logo {
-  color: #fff;
-  display: flex;
+.logo {
   height: 50px;
-  width: 100%;
+  display: flex;
   align-items: center;
   justify-content: center;
   pointer-events: none;
@@ -42,8 +48,6 @@
   font-weight: bold;
   opacity: 0;
   white-space: nowrap; /* Prevent text wrapping */
-  margin-bottom: 20px; /* Adjust margin as needed */
-
   transition: opacity 0.5s ease-in-out;
 }
 
@@ -123,6 +127,7 @@
 
 .sidebar .navItem {
   opacity: 0;
+  pointer-events: none;
   transition: opacity 0.5s ease-in-out; /* Added transition */
 }
 
@@ -140,6 +145,7 @@
   padding: 0.4rem 1.2rem;
   line-height: 1.8rem;
   z-index: 20;
+  pointer-events: none;
   opacity: 0;
 }
 

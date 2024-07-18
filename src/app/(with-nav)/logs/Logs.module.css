@@ -3,7 +3,6 @@
     display: flex;
     justify-content: center;
     width: 100%;
-
 }
 .logs {
     flex-direction: column;
@@ -14,17 +13,48 @@
     font-size: 2rem;
 }
 
-.logs li, .searchbar{
+.filters {
+    display: flex;
+    justify-content: space-between;
+}
+.suggestions {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    background: rgba(255,255,255,0.2);
+    border-radius: 8px;
+}
+
+.suggestions li {
+    margin-bottom: 1rem;
+}
+
+.activeSuggestion {
+    background: rgba(255,255,255,0.5);
+}
+
+.logList li, .filter, .filterInput, .tagInput{
     background: rgba(255,255,255,0.2);
     border-radius: 8px;
     margin-bottom: 1rem;
+}
+
+.filterTag {
+    background: rgba(255,255,255,0.2);
+    border-radius: 8px;
+    display: inline;
+
+}
+
+.filterTag button {
+    margin-right: 8px;
 }
 
 .sortButton {
     float: right;
 }
 
-.logs li{
+.logList li{
     display: flex;
     align-items: center;
     height: 72px;
@@ -40,5 +70,4 @@
 }
 .createdAt {
     width: 3rem;
-
 }

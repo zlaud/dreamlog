@@ -1,13 +1,14 @@
 "use client";
 
-import {useEffect, useState} from "react";
-import {addDoc, collection, doc} from "firebase/firestore";
+import {useEffect, useState, useRef} from "react";
+import {addDoc, collection, doc, query, where, getDocs, limit} from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import {auth, db} from "@/lib/firebase";
 import { useRouter } from "next/navigation";
 import EmojiPicker, { EmojiClickData } from 'emoji-picker-react';
 import styles from "./NewEntry.module.css";
 import { User as FirebaseUser } from "firebase/auth";
+import TagInput from "@/components/taginput/TagInput";
 
 const NewEntry = () => {
   const [title, setTitle] = useState("");
@@ -15,28 +16,26 @@ const NewEntry = () => {
   const [dreamType, setDreamType] = useState("Regular Dream");
   const [dreamLength, setDreamLength] = useState(3);
   const [emotions, setEmotions] = useState("");
-  const [people, setPeople] = useState("");
-  const [places, setPlaces] = useState("");
+  const [people, setPeople] = useState<string[]>([]);
+  const [places, setPlaces] = useState<string[]>([]);
+
 
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
   const [selectedEmojis, setSelectedEmojis] = useState<string[]>([]);
   const [user, setUser] = useState<FirebaseUser | null>(null);
   const router = useRouter();
 
-  const postsCollectionRef = collection(db, "posts");
-
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
         setUser(currentUser);
       } else {
-        router.push("/login"); // Redirect to login if not authenticated
+        router.push("/login");
       }
     });
 
     return () => unsubscribe();
   }, [router]);
-
 
   const createPost = async () => {
     if (!user) {
@@ -52,13 +51,28 @@ const NewEntry = () => {
       emotions,
       people,
       places,
-      createdAt: new Date(), // Timestamp for when the post was created
+      createdAt: new Date(),
       author: {
         uid: user.uid,
         email: user.email,
-        displayName: user.displayName, // Include displayName if available
+        displayName: user.displayName,
       },
     });
+
+    const saveTags = async (tags: string[], collectionName: string) => {
+      const collectionRef = collection(db, `users/${user.uid}/${collectionName}`);
+      for (const tag of tags) {
+        const q = query(collectionRef, where('name', '==', tag));
+        const querySnapshot = await getDocs(q);
+        if (querySnapshot.empty) {
+          await addDoc(collectionRef, { name: tag });
+        }
+      }
+    };
+
+    await saveTags(people, 'people');
+    await saveTags(places, 'places');
+
     router.push("/logs");
   };
 
@@ -117,25 +131,31 @@ const NewEntry = () => {
                 </li>
                 <li>
                   <label>People:</label>
-                  <input
-                      type="text"
+                  <TagInput
+                      userId={user?.uid || ""}
+                      collectionName="people"
                       placeholder="People"
-                      value={people}
-                      onChange={(e) => setPeople(e.target.value)}
+                      tags={people}
+                      setTags={setPeople}
                   />
                 </li>
                 <li>
                   <label>Places:</label>
-                  <input
-                      type="text"
+                  <TagInput
+                      userId={user?.uid || ""}
+                      collectionName="places"
                       placeholder="Places"
-                      value={places}
-                      onChange={(e) => setPlaces(e.target.value)}
+                      tags={places}
+                      setTags={setPlaces}
                   />
                 </li>
               </ul>
 
-            <button className={styles.submitButton} onClick={createPost}>Submit Dream</button>
+
+            <button className={styles.submitButton} onClick={createPost}>
+              <div className={styles.btnColor}></div>
+              <span>Submit Dream</span>
+            </button>
           </div>
         </div>
   );

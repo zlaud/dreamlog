@@ -1,0 +1,17 @@
+.suggestions {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border: 1px solid #080708;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.suggestions li {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.activeSuggestion {
+    background-color: #080708;
+}

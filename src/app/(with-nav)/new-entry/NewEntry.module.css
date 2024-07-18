@@ -78,23 +78,42 @@
     border: none;
     background-color: transparent;
     outline: none;
+
 }
 
-.submitButton::before {
-    content:"";
+.submitButton{
+    padding: 0.5rem;
+    background: rgba(255,255,255, 0.2);
+    border-radius: 16px;
+    cursor: pointer;
+    transition: transform .4s;
+    overflow: hidden;
+
+}
+.submitButton:hover {
+    transform: rotate(-4deg) scale(1.1);
+}
+
+.submitButton:hover .btnColor {
+    left: 0%;
+}
+
+.btnColor {
+    width: 100%;
+    height: 120px;
+    background-image: linear-gradient(45deg, #2e4482, #546bab);
+    pointer-events: none;
     position: absolute;
-    width: 10%;
-    height: 10%;
-    background: #000;
-    transition: transform 0.5s;
-    transform-origin: 0 0;
-    transition-timing-function: cubic-bezier(0.5, 1.6, 0.4, 0.7);
-    transform: scaleX(0);
+    top: -36px;
+    left: -150%;
+    transition: left 0.3s ease; /* Simplified animation */
+    z-index: -1; /* Ensure it is behind the text */
 }
-
-.submitButton:hover::before {
-    transform: scaleX(1);
-    color: #ffffff;
+.editButton {
+    display: flex;
+}
+.editButton span{
+    margin-right: 0.5rem;
 }
 
 .emojiPickerContainer {
@@ -110,3 +129,35 @@
     border: 1px solid #ccc;
     padding: 5px;
 }
+
+.tagsInput {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.tag {
+    background-color: #e0e0e0;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.tag button {
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+.btn {
+    display: flex;
+    justify-content: space-between;
+}
+
+
+
+
+
+
+
+
+
