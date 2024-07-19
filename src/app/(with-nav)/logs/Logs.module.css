@@ -39,14 +39,16 @@
     margin-bottom: 1rem;
 }
 
-.filterTag {
+.filterTag, .tag {
     background: rgba(255,255,255,0.2);
     border-radius: 8px;
     display: inline;
 
 }
-
-.filterTag button {
+.filterTag span, .tag span {
+    margin-left: 8px;
+}
+.filterTag button, .tag button {
     margin-right: 8px;
 }
 

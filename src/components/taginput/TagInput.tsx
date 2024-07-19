@@ -61,11 +61,11 @@ const TagInput: React.FC<TagInputProps> = ({ userId, collectionName, placeholder
         <div >
             {tags.map((tag, index) => (
                 <span key={index} className={styles.tag}>
-          {tag}
+                    <span> {tag} </span>
                     <button type="button" onClick={() => removeTag(tag)}>x</button>
-        </span>
+                </span>
             ))}
-            <input
+            <input className={styles.tag}
                 type="text"
                 placeholder={placeholder}
                 ref={inputRef}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Menu, BookOpenText, BookPlus, LogOut } from "lucide-react";
+import { Menu, BookOpenText, BookPlus, LogOut, UserRound } from "lucide-react";
 import Link from "next/link";
 import { signOut } from "firebase/auth";
 import styles from "./Navbar.module.css";
@@ -66,6 +66,16 @@ export const Navbar = () => {
                 <span className={styles.navItem}>New Entry</span>
               </Link>
               <span className={styles.tooltip}>New Entry</span>
+            </li>
+
+            <li>
+              <Link href = "/account">
+                <i>
+                  <UserRound/>
+                </i>
+                <span className={styles.navItem}>Account</span>
+              </Link>
+              <span className={styles.tooltip}>Account</span>
             </li>
 
             <li className={styles.logoutButton}>
