@@ -1,13 +1,13 @@
 "use client";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { getFirestore, doc, setDoc } from "firebase/firestore";
 import { app, auth } from "@/lib/firebase";
-import styles from "./SignUp.module.css";
-import {router} from "next/client";
-import {useRouter} from "next/navigation";
+import styles from "@/styles/auth.module.css";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const Signup = () => {
   const [email, setEmail] = useState<string>("");
@@ -18,6 +18,12 @@ const Signup = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+
+  const emailRef = useRef<HTMLInputElement>(null);
+  const firstNameRef = useRef<HTMLInputElement>(null);
+  const lastNameRef = useRef<HTMLInputElement>(null);
+  const displayNameRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
 
   const handleSignUp = async () => {
     const db = getFirestore(app);
@@ -49,6 +55,9 @@ const Signup = () => {
           email,
           displayName,
           uid: user.uid,
+          totalLogs: 0,
+          currentStreak: 0,
+          longestStreak: 0,
           createdAt: new Date(),
         });
 
@@ -70,12 +79,23 @@ const Signup = () => {
     } finally {
       setLoading(false);
     }
+  };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, nextInputRef?: React.RefObject<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      if (nextInputRef && nextInputRef.current) {
+        nextInputRef.current.focus();
+      } else {
+        handleSignUp();
+      }
+    }
   };
 
   return (
       <div className={styles.page}>
-        <div className={styles.signUp}>
+        <span className={styles.logo}>DreamLog</span>
+        <Link href={"/"}> {"<-"} Back to Landing Page</Link>
+        <div className={styles.auth}>
           <h1>Sign Up</h1>
           {error && <p className={styles.eMsg}>{error}</p>}
           <ul>
@@ -85,6 +105,8 @@ const Signup = () => {
                   placeholder="Email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  ref={emailRef}
+                  onKeyDown={(e) => handleKeyDown(e, firstNameRef)}
               />
             </li>
             <li>
@@ -93,6 +115,8 @@ const Signup = () => {
                   placeholder="First Name"
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
+                  ref={firstNameRef}
+                  onKeyDown={(e) => handleKeyDown(e, lastNameRef)}
               />
             </li>
             <li>
@@ -101,6 +125,8 @@ const Signup = () => {
                   placeholder="Last Name"
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
+                  ref={lastNameRef}
+                  onKeyDown={(e) => handleKeyDown(e, displayNameRef)}
               />
             </li>
             <li>
@@ -109,6 +135,8 @@ const Signup = () => {
                   placeholder="Display Name"
                   value={displayName}
                   onChange={(e) => setDisplayName(e.target.value)}
+                  ref={displayNameRef}
+                  onKeyDown={(e) => handleKeyDown(e, passwordRef)}
               />
             </li>
             <li>
@@ -117,6 +145,8 @@ const Signup = () => {
                   placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  ref={passwordRef}
+                  onKeyDown={(e) => handleKeyDown(e)}
               />
             </li>
           </ul>
@@ -125,7 +155,6 @@ const Signup = () => {
           </Button>
         </div>
       </div>
-
   );
 };
 

@@ -2,11 +2,11 @@
 import { useEffect, useState } from "react";
 import {usePathname, useRouter} from "next/navigation"; // Import useRouter from next/router
 import { db, auth } from "@/lib/firebase.js";
-import { deleteDoc, doc, getDoc } from "firebase/firestore";
+import {deleteDoc, doc, getDoc, updateDoc} from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Pencil, Trash } from "lucide-react";
 import styles from '../../new-entry/NewEntry.module.css';
-import Modal from "../../../../components/modal/Modal";
+import Modal from "@/components/modal/Modal";
 
 const ViewLog = () => {
     const router = useRouter(); // Use useRouter hook
@@ -68,6 +68,18 @@ const ViewLog = () => {
         try {
             const postDocRef = doc(db, `users/${user.uid}`, logId);
             await deleteDoc(postDocRef);
+
+            const userDocRef = doc(db, "users", user.uid);
+            const userDoc = await getDoc(userDocRef);
+            if (userDoc.exists()) {
+                const userData = userDoc.data();
+                const totalLogs = userData.totalLogs || 0;
+
+                // Update totalLogs count
+                await updateDoc(userDocRef, {
+                    totalLogs: Math.max(totalLogs - 1, 0)
+                });
+            }
             router.push("/logs");
         } catch (error) {
             console.error("Error deleting post: ", error);

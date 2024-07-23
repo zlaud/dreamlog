@@ -60,13 +60,15 @@ const FilterInput: React.FC<FilterInputProps> = ({ className, userId, collection
 
     return (
         <div>
-            {filters.map((filter, index) => (
+            <div className={styles.filterTags}>
+                {filters.map((filter, index) => (
+                    <span key={index} className={styles.filterTag}>
+            <span>{filter} </span>
+            <button type="button" onClick={() => removeFilter(filter)}>x</button>
+          </span>
+                ))}
+            </div>
 
-                <span key={index} className={styles.filterTag}>
-                    <span>{filter} </span>
-                    <button type="button" onClick={() => removeFilter(filter)}>x</button>
-        </span>
-            ))}
             <input className={styles.filterInput}
                 type="text"
                 placeholder={placeholder}

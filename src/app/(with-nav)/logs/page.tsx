@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { db, auth } from "@/lib/firebase.js";
 import { collection, getDoc, getDocs } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { Filter } from 'lucide-react';
 import { useRouter } from "next/navigation";
 import Link from 'next/link';
 import styles from './Logs.module.css';
@@ -15,7 +16,7 @@ const Logs = () => {
 
   const [peopleFilters, setPeopleFilters] = useState<string[]>([]);
   const [placesFilters, setPlacesFilters] = useState<string[]>([]);
-
+  const [showFilters, setShowFilters] = useState<boolean>(false);
   const [filteredLogs, setFilteredLogs] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
@@ -92,12 +93,18 @@ const Logs = () => {
 
     setFilteredLogs(filtered);
   };
+  const renderPeoplePlaces = (items: string[], label: string) => {
+    if (!items || items.length === 0) return null;
 
+    const displayedItems = items.slice(0, 2).join(", ");
+    const moreCount = items.length > 2 ? ` and ${items.length - 2}+` : "";
 
-  const handleSortOrderChange = (order: "asc" | "desc") => {
-    setSortOrder(order);
+    return (
+        <div className={styles.peoplePlaces}>
+          <strong>{label}: </strong>{displayedItems}{moreCount}
+        </div>
+    );
   };
-
 
 
   return (
@@ -109,52 +116,98 @@ const Logs = () => {
           <div className={styles.date}>
             {date}
           </div>
-          <div className={styles.filters}>
-            <input
-                className={styles.filter}
-                type="text"
-                placeholder="Search by title"
-                value={searchQuery}
-                onChange={(e) => handleSearch(e.target.value)}
-            />
-            <FilterInput
-                className={styles.filter}
-                userId={user?.uid || ""}
-                collectionName="people"
-                placeholder="Filter by people"
-                filters={peopleFilters}
-                setFilters={setPeopleFilters}
-            />
-            <FilterInput
-                className={styles.filter}
-                userId={user?.uid || ""}
-                collectionName="places"
-                placeholder="Filter by places"
-                filters={placesFilters}
-                setFilters={setPlacesFilters}
-            />
 
-            <button className={styles.sortButton} onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}>
-              Sort by {sortOrder === "asc" ? "newest" : "oldest"}
-            </button>
+
+          <div className={styles.top}>
+            <div className={styles.topleft}>
+              <input
+                  className={styles.searchbar}
+                  type="text"
+                  placeholder="Search by title"
+                  value={searchQuery}
+                  onChange={(e) => handleSearch(e.target.value)}
+              />
+
+              <button className={styles.sortButton} onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}>
+                Sort by {sortOrder === "asc" ? "newest" : "oldest"}
+              </button>
+            </div>
+
+            <div className={styles.topright}>
+              <div className={styles.filters}>
+                {showFilters && (
+                    <div className={styles.filterInputs}>
+                      <ul>
+                        <li>
+                          <FilterInput
+                              userId={user?.uid || ""}
+                              collectionName="people"
+                              placeholder="Filter by people"
+                              filters={peopleFilters}
+                              setFilters={setPeopleFilters}
+                          />
+                        </li>
+                        <li>
+                          <FilterInput
+                              userId={user?.uid || ""}
+                              collectionName="places"
+                              placeholder="Filter by places"
+                              filters={placesFilters}
+                              setFilters={setPlacesFilters}
+                          />
+                        </li>
+                      </ul>
+
+
+                    </div>
+                )}
+              </div>
+              <button className={styles.filterButton} onClick={() => setShowFilters(!showFilters)}>
+                <Filter></Filter>
+              </button>
+            </div>
+
           </div>
-
+          {logs.length === 0 ? (
+              <p className={styles.noLogsMessage}>You don't have any logs. Start Journaling!</p>
+          ) : (
+              filteredLogs.length === 0 ? (
+                  <p className={styles.noLogsMessage}>No such log found.</p>
+              ) : (
           <ul className={styles.logList}>
             {filteredLogs.map((log) => (
                 <li key={log.id}>
                   <Link href={`/logs/${log.id}`}>
-                  <div className={styles.details}>
 
+                  <div className={styles.details}>
+                    <div className={styles.detailsL}>
                       <div className={styles.createdAt}>
                         {formatDate(log.createdAt)}
                       </div>
                       <div className={styles.title}>{log.title}</div>
+                    </div>
+
+
+
+                    <div className={styles.detailsR}>
+                      <div className={styles.people}>
+
+                        {renderPeoplePlaces(log.people, "People")}
+                      </div>
+                      <div className={styles.places}>
+
+                        {renderPeoplePlaces(log.places, "Places")}
+                      </div>
+                    </div>
+
                   </div>
                   </Link>
 
                 </li>
             ))}
           </ul>
+              )
+          )}
         </div>
       </div>
   )

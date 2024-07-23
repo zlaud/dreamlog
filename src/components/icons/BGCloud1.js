@@ -4,7 +4,7 @@ const BGCloud1 = ({className}) => (
             <style>
                 {`.cloud-cls-1 { opacity: .8; } 
                 .cloud-cls-1, 
-                .cloud-cls-2 { fill: #e7bb67; stroke-width: 0px; }
+                .cloud-cls-2 { fill: #a18248; stroke-width: 0px; }
                 .cloud-cls-2 { opacity: .9;}`
                 }
             </style>

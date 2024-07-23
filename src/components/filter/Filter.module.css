@@ -1,0 +1,41 @@
+.filterTags {
+    display: flex;
+    flex-direction: column;
+    max-height: 100px;
+    overflow-y: auto;
+    margin-bottom: 1rem;
+}
+
+.filterTag {
+    display: flex;
+    justify-content: space-between;
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 0.5rem;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+}
+
+.suggestions {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    max-height: 100px;
+    overflow-y: auto;
+}
+
+.suggestions li {
+    padding: 0.5rem;
+    cursor: pointer;
+}
+
+.activeSuggestion {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.filterInput {
+    margin-bottom: 1rem;
+    width: 100%;
+    padding: 0.5rem;
+}

@@ -4,7 +4,7 @@ const stars = ({className}) => (
         <defs>
             <style>
                 {`.stars-cls-1 {
-        fill: #ffec9c;
+        fill: #cfa85c;
         stroke-width: 0px;
       }`
                 }

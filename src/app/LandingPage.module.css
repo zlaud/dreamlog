@@ -1,17 +1,25 @@
-.landingPage {
-    text-align: center;
-    color: #fff;
-    background: linear-gradient(to bottom, #3B497B, #26436E, #182744);
+.page {
     display: flex;
     flex-direction: column;
     justify-content: center;
-
+    z-index: -20;
+    background:  #151427;
 }
+
+.landingPage {
+    text-align: center;
+    color: #fff;
+    position: relative;
+    z-index: 10;
+}
+
+
 /* ----------------Navbar -------------*/
 .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background: #5a336e;
     padding: 1rem 2rem;
 }
 
@@ -31,43 +39,57 @@
     border-radius: 4px;
     cursor: pointer;
     font-size: 1rem;
-    background-color: #0070f3;
+    background-color: #e8817f;
     color: white;
 }
 /* ----------------header -------------*/
 
-.header {
+.header{
     padding: 5rem 2rem;
+    width: 100%;
+    margin-bottom: 3.1rem;
 }
 
-.header h1 {
+.header h1, .contacts h1{
     font-size: 2.5rem;
-    margin-bottom: 2rem;
+    animation-delay: 0.2s;
 }
 
 .header p {
     font-size: 1.5rem;
-    margin-bottom: 2rem;
+    animation-delay: 0.4s;
 }
 
-.hsb{
-    margin-bottom: 2rem;
+.hsb, .ctaButton{
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -50%);
     font-weight: bold;
     font-size: 1rem;
     padding: 0.5rem 1rem;
-    border: none;
     cursor: pointer;
     border-radius: 4px;
     transition: font-size 0.3s  ease;
-    background-color: #48bb78;
+    background-color: #c3727c;
 }
 
-.hsb:hover {
+.hsb {
+    top: 20rem;
+}
+.ctaButton {
+    bottom: 32rem;
+}
+
+.hsb:hover, .ctaButton:hover {
     transition: font-size 0.3s  ease;
     font-size: 1.3rem;
 }
 
-/* ---------------- arrow -------------*/
+
+.featuresText, .arrow {
+    margin: 1rem;
+}
+    /* ---------------- arrow -------------*/
 
 .arrow {
     font-size: 1.5rem;
@@ -75,9 +97,6 @@
 }
 /* ---------------- features -------------*/
 
-.features {
-    padding:80px 0;
-}
 
 .tabTitles {
     display: flex;
@@ -90,81 +109,116 @@
     padding: 10px;
     border-bottom: 2px solid transparent;
     transition: border-bottom 0.3s, color 0.3s;
+    user-select: none;
 }
 .activeLink {
-    border-bottom: 2px solid #48bb78; /* Change border color to #48bb78 */
-    color: #48bb78;
+    border-bottom: 2px solid #c3727c; /* Change border color to #48bb78 */
+    color: #c3727c;
 }
 
 .tabContents {
     display: flex;
     justify-content: center;
+    margin-bottom: 1rem;
 }
 .tabContent {
     padding: 10px;
 }
 .image {
-    margin-top: 2rem;
     height: auto;
-    margin-right: 10px;
-    width: 800px
+    width: 800px;
+    margin:2rem;
 
+}
+
+.gettingStarted {
+    margin-bottom: 1rem;
 }
 .secondaryContent {
     padding: 3rem 2rem;
-    animation: fadeInUp 1.5s ease-out;
 }
 
 .secondaryContent p {
     font-size: 1.5rem;
-    margin-bottom: 2rem;
+    margin-bottom: 5rem;
 }
 
-.ctaButtons {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-}
 
-.ctaButton {
-    padding: 0.75rem 1.5rem;
-    background: linear-gradient(45deg, #5f2dd2, #8350ce);
-    color: white;
-    border: none;
-    border-radius: 16px;
-    cursor: pointer;
-    font-size: 1rem;
-}
 
-.ctaButton:hover {
-    background: linear-gradient(45deg, #8350ce, #5f2dd2);
-    transform: translateY(-5px);
-    animation: wave 0.5s infinite;
-}
-
-.cloud {
+.curves1 {
     position: absolute;
-    top: 50%;
-    font-size: 100rem;
+    top: 3%;
+    z-index: -10;
+    aspect-ratio: 960/300;
     width: 100%;
-    display: flex;
-    justify-content: space-between;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
     pointer-events: none;
-    z-index: 10;
-    bottom: 0px;
-    height: 19rem;
+    background-image: url("../components/icons/layer1.svg");
 }
 
-.cloud1, .cloud2 {
-    transition: transform 0.5s ease; /* Smooth transition for movement */
+.bubble {
+    border-bottom-left-radius: 50% 60%;
+    border-bottom-right-radius: 50% 60%;
+    position: absolute;
+    bottom: 25rem;
+    height: 15rem;
+    width: 100%;
+    background-color: #151427;
+    z-index: -5;
 }
 
-.cloud1 {
-    left: 0;
+.bubblebg {
+    background-color: #c3727c;
+    position: absolute;
+    bottom: 0;
+    height: 40rem;
+    z-index: -10;
+    width: 100%;
 }
 
-.cloud2 {
-    right: 0;
+.blur {
+    position: absolute;
+    height: 55%;
+    width: 90%;
+    background-image: radial-gradient(closest-side,  #5a336e,  rgba(0,0,0,0));
+    top: 45%;
+    left: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    z-index: -5;
+}
+
+.pfp {
+    height: 8rem;
+    border-radius: 50% 50%;
+    margin-bottom: 1rem;
+}
+.contacts h1, .jhkim, .zlaud{
+    margin-bottom: 4rem;
+}
+
+.jhkim {
+    margin-right: 10rem;
+}
+.jhkim, .zlaud {
+    text-align: left;
+    display: inline-block;
+    background: transparent;
+    color: #080708;
+    font-weight: bold;
+
+}
+
+.jhkim h2, .zlaud h2 {
+    font-size: 24px;
+    margin-bottom: 1rem;
+}
+
+.fadeIn {
+    opacity: 0;
+    animation: fadeInUp 1s ease-out forwards;
 }
 
 
@@ -187,45 +241,3 @@
         transform: translateY(10px);
     }
 }
-@keyframes bounceSide {
-    0%, 100% {
-        transform: translateX(0);
-    }
-    50% {
-        transform: translateX(10px);
-    }
-}
-@keyframes wave {
-    0%, 100% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(-10px);
-    }
-}
-
-/*.cloud {*/
-/*    position: absolute;*/
-/*    top: 50%;*/
-/*    width: 100%;*/
-/*    display: flex;*/
-/*    justify-content: space-between;*/
-/*    pointer-events: none;*/
-/*    z-index: 10;*/
-/*}*/
-
-/*.cloud img {*/
-/*    max-width: 50%;*/
-/*    height: auto;*/
-/*}*/
-
-/*.cloud1 {*/
-/*    left: 0;*/
-/*    transition: transform 0.5s ease; !* Smooth transition for movement *!*/
-/*}*/
-
-/*.cloud2 {*/
-/*    right: 0;*/
-/*    transition: transform 0.5s ease; !* Smooth transition for movement *!*/
-/*}*/
-/* Cloud positioning */

@@ -1,27 +1,31 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { getFirestore, doc, getDoc, updateDoc, deleteDoc, collection, getDocs } from "firebase/firestore";
-import { updatePassword, updateProfile } from "firebase/auth";
+import { updatePassword, updateProfile, updateEmail, reauthenticateWithCredential, EmailAuthProvider } from "firebase/auth";
 import { auth, app } from "@/lib/firebase";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import Modal from "@/components/modal/Modal";
 import styles from "./Account.module.css";
 
 const Account = () => {
     const [user, loading, error] = useAuthState(auth);
     const [userInfo, setUserInfo] = useState<any>(null);
-    const [newDisplayName, setNewDisplayName] = useState<string>("");
-    const [newPassword, setNewPassword] = useState<string>("");
     const [newFirstName, setNewFirstName] = useState<string>("");
     const [newLastName, setNewLastName] = useState<string>("");
+    const [newDisplayName, setNewDisplayName] = useState<string>("");
+    const [newPassword, setNewPassword] = useState<string>("");
+    const [newEmail, setNewEmail] = useState<string>("");
+    const [currentPassword, setCurrentPassword] = useState<string>("");
+    const [people, setPeople] = useState<{ name: string, count: number }[]>([]);
+    const [places, setPlaces] = useState<{ name: string, count: number }[]>([]);
+    const [editingField, setEditingField] = useState<string>("");
+    const [activeTab, setActiveTab] = useState<string>("stats");
 
-    const [people, setPeople] = useState<string[]>([]);
-    const [places, setPlaces] = useState<string[]>([]);
-    const [isEditingDisplayName, setIsEditingDisplayName] = useState<boolean>(false);
-    const [isEditingPassword, setIsEditingPassword] = useState<boolean>(false);
-    const [isEditingName, setIsEditingName] = useState<boolean>(false);
+
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
 
     const db = getFirestore(app);
 
@@ -35,6 +39,7 @@ const Account = () => {
                     setNewFirstName(data.firstName);
                     setNewLastName(data.lastName);
                     setNewDisplayName(data.displayName);
+                    setNewEmail(user.email || "");
                 }
             };
 
@@ -44,11 +49,11 @@ const Account = () => {
                 const peopleSnapshot = await getDocs(peopleCollection);
                 const placesSnapshot = await getDocs(placesCollection);
 
-                const fetchedPeople = peopleSnapshot.docs.map(doc => doc.data().name);
-                const fetchedPlaces = placesSnapshot.docs.map(doc => doc.data().name);
+                const fetchedPeople = peopleSnapshot.docs.map(doc => doc.data() as { name: string, count: number });
+                const fetchedPlaces = placesSnapshot.docs.map(doc => doc.data() as { name: string, count: number });
 
-                setPeople(fetchedPeople);
-                setPlaces(fetchedPlaces);
+                setPeople(fetchedPeople.sort((a, b) => b.count - a.count));
+                setPlaces(fetchedPlaces.sort((a, b) => b.count - a.count));
             };
 
             fetchUserInfo();
@@ -56,35 +61,50 @@ const Account = () => {
         }
     }, [user, db]);
 
-    const handleUpdateName = async () => {
-        if (user && newFirstName && newLastName) {
-            const fullName = `${newFirstName} ${newLastName}`;
-            await updateProfile(user, { displayName: fullName });
-            await updateDoc(doc(db, "users", user.uid), {
-                firstName: newFirstName,
-                lastName: newLastName,
-                displayName: fullName
-            });
-            setUserInfo({ ...userInfo, firstName: newFirstName, lastName: newLastName, displayName: fullName });
-            setIsEditingName(false);
-        }
-    };
+    const handleUpdate = async (field: string) => {
+        if (!user) return;
 
-
-    const handleUpdateDisplayName = async () => {
-        if (user && newDisplayName) {
-            await updateProfile(user, { displayName: newDisplayName });
-            await updateDoc(doc(db, "users", user.uid), { displayName: newDisplayName });
-            setUserInfo({ ...userInfo, displayName: newDisplayName });
-            setIsEditingDisplayName(false);
-        }
-    };
-
-    const handleUpdatePassword = async () => {
-        if (user && newPassword) {
-            await updatePassword(user, newPassword);
-            setNewPassword("");
-            setIsEditingPassword(false);
+        try {
+            switch (field) {
+                case "name":
+                    if (newFirstName && newLastName) {
+                        const fullName = `${newFirstName} ${newLastName}`;
+                        await updateProfile(user, { displayName: fullName });
+                        await updateDoc(doc(db, "users", user.uid), {
+                            firstName: newFirstName,
+                            lastName: newLastName,
+                            displayName: fullName,
+                        });
+                        setUserInfo({ ...userInfo, firstName: newFirstName, lastName: newLastName, displayName: fullName });
+                    }
+                    break;
+                case "displayName":
+                    if (newDisplayName) {
+                        await updateProfile(user, { displayName: newDisplayName });
+                        await updateDoc(doc(db, "users", user.uid), { displayName: newDisplayName });
+                        setUserInfo({ ...userInfo, displayName: newDisplayName });
+                    }
+                    break;
+                case "email":
+                    if (newEmail && currentPassword) {
+                        const credential = EmailAuthProvider.credential(user.email || "", currentPassword);
+                        await reauthenticateWithCredential(user, credential);
+                        await updateEmail(user, newEmail);
+                        await updateDoc(doc(db, "users", user.uid), { email: newEmail });
+                        setUserInfo({ ...userInfo, email: newEmail });
+                    }
+                    break;
+                case "password":
+                    if (newPassword) {
+                        await updatePassword(user, newPassword);
+                        setNewPassword("");
+                    }
+                    break;
+            }
+            setEditingField("");
+        } catch (error) {
+            console.error(`Error updating ${field}:`, error);
+            alert(`Failed to update ${field}. Please try again.`);
         }
     };
 
@@ -97,6 +117,14 @@ const Account = () => {
         }
     };
 
+    const renderEditableField = (field: string, value: string, onChange: (e: React.ChangeEvent<HTMLInputElement>) => void, type: string = "text") => (
+        <Fragment>
+            <Input type={type} value={value} onChange={onChange} />
+            <Button onClick={() => handleUpdate(field)}>Update</Button>
+            <Button onClick={() => setEditingField("")}>Cancel</Button>
+        </Fragment>
+    );
+
     if (loading) {
         return <p>Loading...</p>;
     }
@@ -107,95 +135,141 @@ const Account = () => {
 
     return (
         <div className={styles.page}>
-        <div className={styles.accountPage}>
-            {loading && <p>Loading...</p>}
-            {userInfo && (
-                <div className={styles.accountInfo}>
-                    <div className={styles.updateSection}>
-                        <ul>
-                            <li>
-                                {isEditingName ? (
-                                    <>
-                                        <Input
-                                            type="text"
-                                            placeholder="First Name"
-                                            value={newFirstName}
-                                            onChange={(e) => setNewFirstName(e.target.value)}
-                                        />
-                                        <Input
-                                            type="text"
-                                            placeholder="Last Name"
-                                            value={newLastName}
-                                            onChange={(e) => setNewLastName(e.target.value)}
-                                        />
-                                        <Button onClick={handleUpdateName}>Update</Button>
-                                        <Button onClick={() => { setIsEditingName(false); setNewFirstName(userInfo.firstName); setNewLastName(userInfo.lastName); }}>Cancel</Button>
-                                    </>
-                                ) : (
-                                    <>
-                                        <p>Name: {userInfo.firstName} {userInfo.lastName}</p>
-                                        <Button onClick={() => setIsEditingName(true)}>Change</Button>
-                                    </>
-                                )}
-                            </li>
-                            <li>
-                                {isEditingDisplayName ? (
-                                <>
-                                    <Input
-                                        type="text"
-                                        placeholder="New Display Name"
-                                        value={newDisplayName}
-                                        onChange={(e) => setNewDisplayName(e.target.value)}
-                                    />
-                                    <Button onClick={handleUpdateDisplayName}>Update</Button>
-                                    <Button onClick={() => { setIsEditingDisplayName(false); setNewDisplayName(userInfo.displayName); }}>Cancel</Button>
-                                </>
-                            ) : (
-                                <>
-                                    <p>Display Name: {userInfo.displayName}</p>
-                                    <Button onClick={() => setIsEditingDisplayName(true)}>Change</Button>
-                                </>
-                            )}
-                            </li>
-                        </ul>
-                    </div>
+            <div className={styles.accountPage}>
+                {userInfo && (
+                    <div>
+                        <div className={styles.tabs}>
+                            <button onClick={() => setActiveTab("stats")} className={activeTab === "stats" ? styles.activeTab : ""}>Stats</button>
+                            <button onClick={() => setActiveTab("account")} className={activeTab === "account" ? styles.activeTab : ""}>Account Info</button>
+                        </div>
 
-                    <div className={styles.updateSection}>
-                        <h2>Password</h2>
-                        {isEditingPassword ? (
-                            <>
-                                <Input
-                                    type="password"
-                                    placeholder="New Password"
-                                    value={newPassword}
-                                    onChange={(e) => setNewPassword(e.target.value)}
-                                />
-                                <Button onClick={handleUpdatePassword}>Update</Button>
-                                <Button onClick={() => { setIsEditingPassword(false); setNewPassword(''); }}>Cancel</Button>
-                            </>
-                        ) : (
-                            <>
-                                <p>Password: ********</p>
-                                <Button onClick={() => setIsEditingPassword(true)}>Change</Button>
-                            </>
+                        {activeTab === "stats" && (
+
+                            <div className={styles.stats}>
+                                <ul>
+                                    <li className={styles.logStreak}>
+                                            <li>
+                                                <div className={styles.statNumber}>
+                                                    {userInfo.totalLogs}
+                                                </div>
+                                                <span> Total Logs </span>
+                                            </li>
+                                            <li>
+                                                <div className={styles.statNumber}>
+                                                    {userInfo.currentStreak}
+                                                </div>
+                                                <span>Current Streak</span>
+                                            </li>
+                                            <li>
+                                                <div className={styles.statNumber}>
+                                                    {userInfo.longestStreak}
+                                                </div>
+                                                <span>Longest Streak</span>
+                                            </li>
+                                    </li>
+
+                                    <li>
+                                        <h2>Your People: </h2>
+                                        <ul className={styles.scrollableList}>
+                                            {people.map((person, index) => (
+                                                <li key={index}>
+                                                    <span>
+                                                        {person.count} {person.name}
+                                                    </span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <h2>Your Places: </h2>
+                                        <ul className={styles.scrollableList}>
+                                            {places.map((place, index) => (
+                                                <li key={index}>
+                                                    <span>
+                                                        {place.count} {place.name}
+                                                    </span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        )}
+
+                        {activeTab === "account" && (
+                            <div className={styles.accountInfo}>
+                                <ul>
+                                    <li>
+                                        {editingField === "name" ? (
+                                            <Fragment>
+                                                <Input type="text" value={newFirstName} onChange={(e) => setNewFirstName(e.target.value)} />
+                                                <Input type="text" value={newLastName} onChange={(e) => setNewLastName(e.target.value)} />
+                                                <Button onClick={() => handleUpdate("name")}>Update</Button>
+                                                <Button onClick={() => setEditingField("")}>Cancel</Button>
+                                            </Fragment>
+                                        ) : (
+                                            <Fragment>
+                                                <p>Name: {userInfo.firstName} {userInfo.lastName}</p>
+                                                <Button onClick={() => setEditingField("name")}>Change</Button>
+                                            </Fragment>
+                                        )}
+                                    </li>
+                                    <li>
+                                        {editingField === "displayName" ? (
+                                            renderEditableField("displayName", newDisplayName, (e) => setNewDisplayName(e.target.value))
+                                        ) : (
+                                            <Fragment>
+                                                <p>Display Name: {userInfo.displayName}</p>
+                                                <Button onClick={() => setEditingField("displayName")}>Change</Button>
+                                            </Fragment>
+                                        )}
+                                    </li>
+                                    <li>
+                                        {editingField === "password" ? (
+                                            renderEditableField("password", newPassword, (e) => setNewPassword(e.target.value), "password")
+                                        ) : (
+                                            <Fragment>
+                                                <p>Password: ********</p>
+                                                <Button onClick={() => setEditingField("password")}>Change</Button>
+                                            </Fragment>
+                                        )}
+                                    </li>
+                                    <li>
+                                        {editingField === "email" ? (
+                                            <Fragment>
+                                                <Input type="email" value={newEmail} onChange={(e) => setNewEmail(e.target.value)} />
+                                                <Input type="password" placeholder="Current Password" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} />
+                                                <Button onClick={() => handleUpdate("email")}>Update</Button>
+                                                <Button onClick={() => setEditingField("")}>Cancel</Button>
+                                            </Fragment>
+                                        ) : (
+                                            <Fragment>
+                                                <p>Email: {userInfo.email}</p>
+                                                <Button onClick={() => setEditingField("email")}>Change</Button>
+                                            </Fragment>
+                                        )}
+                                    </li>
+
+                                    <li >
+                                        <Button onClick={() => setShowDeleteModal(true)} className={styles.deleteButton}>Delete Account</Button>
+                                    </li>
+                                    <Modal
+                                        show={showDeleteModal}
+                                        onClose={() => setShowDeleteModal(false)}
+                                        onConfirm={handleDeleteAccount}
+                                        title="Delete Confirmation"
+                                    >
+                                        <p>Do you really want to permanantly delete your account?</p>
+                                        <p>(It will be unrecoverable)</p>
+                                    </Modal>
+                                </ul>
+
+
+                            </div>
                         )}
                     </div>
-
-                    <div className={styles.updateSection}>
-                        <h2>Delete Account</h2>
-                        <Button onClick={handleDeleteAccount} className={styles.deleteButton}>Delete Account</Button>
-                    </div>
-
-                    <div className={styles.userData}>
-                        <h2>Your People</h2>
-                        <p>{people.join(", ")}</p>
-
-                        <h2>Your Places</h2>
-                        <p>{places.join(", ")}</p>
-                    </div>
-                </div>
-            )}
-        </div>
+                )}
+            </div>
         </div>
     );
 };

@@ -116,20 +116,6 @@
     margin-right: 0.5rem;
 }
 
-.emojiPickerContainer {
-    position: relative;
-    display: inline-block;
-}
-.emojiPicker {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    z-index: 1000;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    padding: 5px;
-}
-
 .tagsInput {
     display: flex;
     flex-wrap: wrap;
@@ -140,6 +126,7 @@
     background-color: #e0e0e0;
     border-radius: 5px;
     padding: 5px;
+
 }
 
 .tag button {

@@ -1,14 +1,27 @@
 "use client";
 
-import {useEffect, useState, useRef} from "react";
-import {addDoc, collection, doc, query, where, getDocs, limit} from "firebase/firestore";
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import {useEffect, useState} from "react";
+import {
+  addDoc,
+  collection,
+  doc,
+  query,
+  where,
+  getDocs,
+  updateDoc,
+  getDoc
+} from "firebase/firestore";
+import {onAuthStateChanged } from 'firebase/auth';
 import {auth, db} from "@/lib/firebase";
 import { useRouter } from "next/navigation";
-import EmojiPicker, { EmojiClickData } from 'emoji-picker-react';
 import styles from "./NewEntry.module.css";
 import { User as FirebaseUser } from "firebase/auth";
 import TagInput from "@/components/taginput/TagInput";
+
+interface PersonPlaceData {
+  name: string;
+  count: number;
+}
 
 const NewEntry = () => {
   const [title, setTitle] = useState("");
@@ -19,9 +32,6 @@ const NewEntry = () => {
   const [people, setPeople] = useState<string[]>([]);
   const [places, setPlaces] = useState<string[]>([]);
 
-
-  const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
-  const [selectedEmojis, setSelectedEmojis] = useState<string[]>([]);
   const [user, setUser] = useState<FirebaseUser | null>(null);
   const router = useRouter();
 
@@ -36,6 +46,20 @@ const NewEntry = () => {
 
     return () => unsubscribe();
   }, [router]);
+
+  const incrementMentionCount = async (collectionRef: any, name: string) => {
+    const q = query(collectionRef, where("name", "==", name));
+    const querySnapshot = await getDocs(q);
+    if (!querySnapshot.empty) {
+      const docRef = querySnapshot.docs[0].ref;
+      const data = querySnapshot.docs[0].data() as PersonPlaceData;
+      await updateDoc(docRef, {
+        count: data.count + 1,
+      });
+    } else {
+      await addDoc(collectionRef, { name, count: 1 });
+    }
+  };
 
   const createPost = async () => {
     if (!user) {
@@ -59,19 +83,42 @@ const NewEntry = () => {
       },
     });
 
-    const saveTags = async (tags: string[], collectionName: string) => {
-      const collectionRef = collection(db, `users/${user.uid}/${collectionName}`);
-      for (const tag of tags) {
-        const q = query(collectionRef, where('name', '==', tag));
-        const querySnapshot = await getDocs(q);
-        if (querySnapshot.empty) {
-          await addDoc(collectionRef, { name: tag });
-        }
-      }
-    };
+    const userDocRef = doc(db, "users", user.uid);
+    const userDoc = await getDoc(userDocRef);
+    const userData = userDoc.data();
+    const lastLogDate = userData?.lastLogDate?.toDate() || null;
+    const currentDate = new Date();
+    const isSameDay = lastLogDate && (lastLogDate.toDateString() === currentDate.toDateString());
+    const isConsecutiveDay = lastLogDate && (new Date(lastLogDate.getTime() + 86400000).toDateString() === currentDate.toDateString());
 
-    await saveTags(people, 'people');
-    await saveTags(places, 'places');
+    let currentStreak = userData?.currentStreak || 0;
+    let longestStreak = userData?.longestStreak || 0;
+    if (isSameDay) {
+    } else if (isConsecutiveDay) {
+      currentStreak += 1;
+      if (currentStreak > longestStreak) {
+        longestStreak = currentStreak;
+      }
+    } else {
+      currentStreak = 1;
+    }
+
+    await updateDoc(userDocRef, {
+      totalLogs: (userData?.totalLogs || 0) + 1,
+      currentStreak,
+      longestStreak,
+      lastLogDate: currentDate,
+    });
+
+    const peopleCollectionRef = collection(db, `users/${user.uid}/people`);
+    for (const person of people) {
+      await incrementMentionCount(peopleCollectionRef, person);
+    }
+
+    const placesCollectionRef = collection(db, `users/${user.uid}/places`);
+    for (const place of places) {
+      await incrementMentionCount(placesCollectionRef, place);
+    }
 
     router.push("/logs");
   };
@@ -134,7 +181,7 @@ const NewEntry = () => {
                   <TagInput
                       userId={user?.uid || ""}
                       collectionName="people"
-                      placeholder="People"
+                      placeholder="Type the name of the person and press &quot;Enter&quot;"
                       tags={people}
                       setTags={setPeople}
                   />
@@ -144,7 +191,7 @@ const NewEntry = () => {
                   <TagInput
                       userId={user?.uid || ""}
                       collectionName="places"
-                      placeholder="Places"
+                      placeholder="Type the name of the place and press &quot;Enter&quot;"
                       tags={places}
                       setTags={setPlaces}
                   />

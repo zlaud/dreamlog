@@ -1,0 +1,68 @@
+.page {
+    display: flex;
+    justify-content: center;
+    margin-top: 5%;
+    width: 100%;
+}
+
+
+.tabs button{
+    margin: 1rem;
+}
+.activeTab {
+    background: rgba(255,255,255,0.2);
+    border-radius: 1rem;
+}
+
+.stats, .accountInfo {
+    display: flex;
+    flex-direction: column;
+    border-radius: 1rem;
+    width: 30rem;
+}
+
+
+.accountInfo ul li{
+    display: flex;
+    justify-content: space-between;
+    margin: 1rem;
+
+}
+.deleteButton {
+    background: #ff5f5f;
+}
+.stats  ul li {
+    margin-bottom: 0.5rem;
+}
+
+.logStreak {
+    background: rgba(255,255,255,0.2);
+    border-radius: 1rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.logStreak li {
+    margin: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.logStreak li span {
+    opacity: 0.7;
+}
+
+.scrollableList {
+    max-height: 200px;
+    overflow-y: auto;
+    display: block;
+}
+
+.scrollableList li {
+    background: rgba(255,255,255,0.2);
+    display: inline-block;
+    border-radius: 1rem;
+    padding: 4px;
+    margin: 4px;
+    word-wrap: break-word;
+}
