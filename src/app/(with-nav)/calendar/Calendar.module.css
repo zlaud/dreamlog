@@ -1,0 +1,39 @@
+.page {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.calendar {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.calendarGrid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1rem;
+}
+
+.dayHeader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+}
+
+.dayTile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    border-radius: 0.5rem;
+}
+
+.moonIcon {
+    width: 20px;
+    height: 20px;
+}

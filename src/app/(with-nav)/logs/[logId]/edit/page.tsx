@@ -1,10 +1,12 @@
 "use client";
+
 import { useEffect, useState } from "react";
-import {usePathname, useRouter, useSearchParams} from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { db, auth } from "@/lib/firebase.js";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
-import styles from '../../../new-entry/NewEntry.module.css';
+import styles from "../../../new-entry/NewEntry.module.css";
+import TagInput from "@/components/taginput/TagInput";
 
 const EditLog = () => {
     const router = useRouter();
@@ -13,6 +15,8 @@ const EditLog = () => {
     const [user, loading, error] = useAuthState(auth);
     const [log, setLog] = useState<any>(null);
     const [formData, setFormData] = useState<any>({});
+    const [people, setPeople] = useState<string[]>([]);
+    const [places, setPlaces] = useState<string[]>([]);
 
     useEffect(() => {
         console.log(logId);
@@ -24,6 +28,8 @@ const EditLog = () => {
                     const data = logSnap.data();
                     setLog(data);
                     setFormData(data);
+                    setPeople(data.people || []);
+                    setPlaces(data.places || []);
                 } else {
                     console.error("No such document!");
                 }
@@ -43,11 +49,12 @@ const EditLog = () => {
             [e.target.name]: e.target.value,
         });
     };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (logId && user) {
             const logRef = doc(db, `users/${user.uid}/logs`, logId);
-            await updateDoc(logRef, formData);
+            await updateDoc(logRef, { ...formData, people, places });
             router.push(`/logs/${logId}`); // Navigate back to the view log page
         }
     };
@@ -66,24 +73,24 @@ const EditLog = () => {
                 <h1>Edit</h1>
                 <form onSubmit={handleSubmit}>
                     <div className={styles.title}>
-                        <input placeholder={"Title"} type="text" name="title" value={formData.title || ""} onChange={handleChange} />
+                        <input placeholder="Title" type="text" name="title" value={formData.title || ""} onChange={handleChange} />
                     </div>
                     <div className={styles.description}>
-                        <textarea placeholder={"Story time..."} name="description" value={formData.description || ""} onChange={handleChange} />
+                        <textarea placeholder="Story time..." name="description" value={formData.description || ""} onChange={handleChange} />
                     </div>
                     {/* Details section*/}
                     <ul>
                         <h1>Details</h1>
                         <li>
                             <label>Dream Type:</label>
-                            <select  name="dreamType" value={formData.dreamType || "Regular Dream"} onChange={handleChange}>
+                            <select name="dreamType" value={formData.dreamType || "Regular Dream"} onChange={handleChange}>
                                 <option value="Regular Dream">Regular Dream</option>
                                 <option value="Nightmare">Nightmare</option>
                             </select>
                         </li>
                         <li>
                             <label>Dream Length (1-5):</label>
-                            <input  type="number" name="dreamLength" value={formData.dreamLength || 3} onChange={handleChange} min={1} max={5} required />
+                            <input type="number" name="dreamLength" value={formData.dreamLength || 3} onChange={handleChange} min={1} max={5} required />
                         </li>
                         <li>
                             <label>Emotions:</label>
@@ -91,11 +98,23 @@ const EditLog = () => {
                         </li>
                         <li>
                             <label>People:</label>
-                            <input type="text" name="people" value={formData.people || ""} onChange={handleChange} />
+                            <TagInput
+                                userId={user?.uid || ""}
+                                collectionName="people"
+                                placeholder='Type the name of the person and press "Enter"'
+                                tags={people}
+                                setTags={setPeople}
+                            />
                         </li>
                         <li>
                             <label>Places:</label>
-                            <input type="text" name="places" value={formData.places || ""} onChange={handleChange} />
+                            <TagInput
+                                userId={user?.uid || ""}
+                                collectionName="places"
+                                placeholder='Type the name of the place and press "Enter"'
+                                tags={places}
+                                setTags={setPlaces}
+                            />
                         </li>
                     </ul>
                     <button type="submit">Save Changes</button>
@@ -104,4 +123,5 @@ const EditLog = () => {
         </div>
     );
 };
+
 export default EditLog;

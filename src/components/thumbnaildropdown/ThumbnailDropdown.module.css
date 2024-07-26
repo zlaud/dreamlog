@@ -1,0 +1,43 @@
+.dropdown {
+    position: relative;
+    width: 100%;
+}
+
+.selected {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.options {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.option {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    cursor: pointer;
+}
+
+.option:hover {
+    background: #f0f0f0;
+}
+
+.thumbnail {
+    width: 24px;  /* Set desired width */
+    height: 24px; /* Set desired height */
+}

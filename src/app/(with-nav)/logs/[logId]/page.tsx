@@ -1,8 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
-import {usePathname, useRouter} from "next/navigation"; // Import useRouter from next/router
+import { usePathname, useRouter } from "next/navigation"; // Import useRouter from next/router
 import { db, auth } from "@/lib/firebase.js";
-import {deleteDoc, doc, getDoc, updateDoc} from "firebase/firestore";
+import { deleteDoc, doc, getDoc, updateDoc } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Pencil, Trash } from "lucide-react";
 import styles from '../../new-entry/NewEntry.module.css';
@@ -10,7 +10,7 @@ import Modal from "@/components/modal/Modal";
 
 const ViewLog = () => {
     const router = useRouter(); // Use useRouter hook
-    const logId  = usePathname(); // Access logId directly from router.query
+    const logId = usePathname().split("/")[2]; // Extract logId from pathname
     const [user, loading, error] = useAuthState(auth);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [log, setLog] = useState<any>(null);
@@ -18,7 +18,7 @@ const ViewLog = () => {
     useEffect(() => {
         const fetchLog = async () => {
             if (logId && user) {
-                const logRef = doc(db, `users/${user.uid}`, logId as string);
+                const logRef = doc(db, `users/${user.uid}/logs`, logId);
                 const logSnap = await getDoc(logRef);
                 if (logSnap.exists()) {
                     setLog(logSnap.data());
@@ -55,8 +55,9 @@ const ViewLog = () => {
     if (!log) {
         return <div>Loading log...</div>; // Handle case where log is still loading
     }
+
     const handleEdit = () => {
-        router.push(`${logId}/edit`);
+        router.push(`/logs/${logId}/edit`);
     };
 
     const handleDelete = async () => {
@@ -66,7 +67,7 @@ const ViewLog = () => {
         }
 
         try {
-            const postDocRef = doc(db, `users/${user.uid}`, logId);
+            const postDocRef = doc(db, `users/${user.uid}/logs`, logId);
             await deleteDoc(postDocRef);
 
             const userDocRef = doc(db, "users", user.uid);
@@ -106,15 +107,15 @@ const ViewLog = () => {
                         <p>Emotions: {log.emotions}</p>
                     </li>
                     <li>
-                        <p>People: {log.people}</p>
+                        <p>People: {log.people?.join(", ")}</p>
                     </li>
                     <li>
-                        <p>Places: {log.places}</p>
+                        <p>Places: {log.places?.join(", ")}</p>
                     </li>
                 </ul>
                 <div className={styles.btn}>
                     <button className={styles.editbtn} onClick={handleEdit}>
-                        <Pencil/>
+                        <Pencil />
                     </button>
                     <button className={styles.deletebtn} onClick={() => setShowDeleteModal(true)}>
                         <Trash />
@@ -125,7 +126,6 @@ const ViewLog = () => {
                     <p>Created At: {log.createdAt ? formatDate(log.createdAt.toDate()) : 'N/A'}</p>
                     <p>Author: {log.author.displayName || log.author.email}</p>
                 </div>
-
             </div>
 
             <Modal

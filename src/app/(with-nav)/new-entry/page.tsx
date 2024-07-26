@@ -17,6 +17,7 @@ import { useRouter } from "next/navigation";
 import styles from "./NewEntry.module.css";
 import { User as FirebaseUser } from "firebase/auth";
 import TagInput from "@/components/taginput/TagInput";
+import ThumbnailDropdown from "@/components/ThumbnailDropdown/ThumbnailDropdown";
 
 interface PersonPlaceData {
   name: string;
@@ -26,7 +27,8 @@ interface PersonPlaceData {
 const NewEntry = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [dreamType, setDreamType] = useState("Regular Dream");
+  const [dreamThumbnail, setDreamThumbnail] = useState("Moon1");
+  // const [dreamType, setDreamType] = useState("Regular Dream");
   const [dreamLength, setDreamLength] = useState(3);
   const [emotions, setEmotions] = useState("");
   const [people, setPeople] = useState<string[]>([]);
@@ -70,7 +72,8 @@ const NewEntry = () => {
     await addDoc(userPostsCollectionRef, {
       title,
       description,
-      dreamType,
+      dreamThumbnail,
+      // dreamType,
       dreamLength,
       emotions,
       people,
@@ -123,6 +126,12 @@ const NewEntry = () => {
     router.push("/logs");
   };
 
+  const renderThumbnailOption = (label: string, ThumbnailComponent: any) => (
+      <option value={label}>
+        <ThumbnailComponent />
+      </option>
+  );
+
   return (
         <div className={styles.page}>
           <div className={styles.newEntry}>
@@ -148,14 +157,19 @@ const NewEntry = () => {
                 <h1>Details</h1>
                 <li>
                   <label>Dream Type:</label>
-                  <select
-                      value={dreamType}
-                      onChange={(e) => setDreamType(e.target.value)}
-                  >
-                    <option value="Regular Dream">Regular Dream</option>
-                    <option value="Nightmare">Nightmare</option>
-                  </select>
+                  {/*<select*/}
+                  {/*    value={dreamType}*/}
+                  {/*    onChange={(e) => setDreamType(e.target.value)}*/}
+                  {/*>*/}
+                  {/*  <option value="Regular Dream">Regular Dream</option>*/}
+                  {/*  <option value="Nightmare">Nightmare</option>*/}
+                  {/*</select>*/}
+                  <ThumbnailDropdown
+                      selectedThumbnail={dreamThumbnail}
+                      setSelectedThumbnail={setDreamThumbnail}
+                  />
                 </li>
+
                 <li>
                   <label>Dream Length (1-5):</label>
                   <input

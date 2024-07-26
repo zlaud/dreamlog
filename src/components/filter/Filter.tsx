@@ -15,13 +15,16 @@ interface FilterInputProps {
 const FilterInput: React.FC<FilterInputProps> = ({ className, userId, collectionName, placeholder, filters, setFilters }) => {
     const [suggestions, setSuggestions] = useState<string[]>([]);
     const [activeSuggestionIndex, setActiveSuggestionIndex] = useState<number>(0);
+    const [isFocused, setIsFocused] = useState<boolean>(false);
     const inputRef = useRef<HTMLInputElement>(null);
+    const suggestionsRef = useRef<HTMLUListElement>(null);
 
     const handleKeyDown = async (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === "Enter" && e.currentTarget.value.trim() !== "") {
-            const newFilter = e.currentTarget.value.trim();
-            if (!filters.includes(newFilter)) {
-                setFilters([...filters, newFilter]);
+        if (e.key === "Enter" && suggestions.length > 0) {
+            e.preventDefault();
+            const selectedSuggestion = suggestions[activeSuggestionIndex];
+            if (selectedSuggestion && !filters.includes(selectedSuggestion)) {
+                setFilters([...filters, selectedSuggestion]);
             }
             e.currentTarget.value = "";
             setSuggestions([]);
@@ -34,9 +37,17 @@ const FilterInput: React.FC<FilterInputProps> = ({ className, userId, collection
             e.currentTarget.value = "";
             setSuggestions([]);
         } else if (e.key === "ArrowDown") {
-            setActiveSuggestionIndex((prevIndex) => (prevIndex + 1) % suggestions.length);
+            setActiveSuggestionIndex((prevIndex) => {
+                const newIndex = (prevIndex + 1) % suggestions.length;
+                scrollToSuggestion(newIndex);
+                return newIndex;
+            });
         } else if (e.key === "ArrowUp") {
-            setActiveSuggestionIndex((prevIndex) => (prevIndex - 1 + suggestions.length) % suggestions.length);
+            setActiveSuggestionIndex((prevIndex) => {
+                const newIndex = (prevIndex - 1 + suggestions.length) % suggestions.length;
+                scrollToSuggestion(newIndex);
+                return newIndex;
+            });
         }
     };
 
@@ -58,26 +69,47 @@ const FilterInput: React.FC<FilterInputProps> = ({ className, userId, collection
         setFilters(filters.filter(filter => filter !== filterToRemove));
     };
 
+    const scrollToSuggestion = (index: number) => {
+        if (suggestionsRef.current) {
+            const listItems = suggestionsRef.current.children;
+            if (listItems[index]) {
+                listItems[index].scrollIntoView({ behavior: "smooth", block: "nearest" });
+            }
+        }
+    };
+
+    const handleFocus = () => {
+        setIsFocused(true);
+    };
+
+    const handleBlur = () => {
+        // Delay hiding suggestions to allow click events to register
+        setTimeout(() => setIsFocused(false), 200);
+    };
+
     return (
         <div>
             <div className={styles.filterTags}>
                 {filters.map((filter, index) => (
                     <span key={index} className={styles.filterTag}>
-            <span>{filter} </span>
-            <button type="button" onClick={() => removeFilter(filter)}>x</button>
-          </span>
+                        <span>{filter} </span>
+                        <button type="button" onClick={() => removeFilter(filter)}>x</button>
+                    </span>
                 ))}
             </div>
 
-            <input className={styles.filterInput}
+            <input
+                className={styles.filterInput}
                 type="text"
                 placeholder={placeholder}
                 ref={inputRef}
                 onKeyDown={handleKeyDown}
                 onChange={(e) => handleAutocomplete(e.target.value)}
+                onFocus={handleFocus}
+                onBlur={handleBlur}
             />
-            {suggestions.length > 0 && (
-                <ul className={styles.suggestions}>
+            {isFocused && suggestions.length > 0 && (
+                <ul className={styles.suggestions} ref={suggestionsRef}>
                     {suggestions.map((suggestion, index) => (
                         <li
                             key={index}
