@@ -1,4 +1,3 @@
-
 .page {
     display: flex;
     justify-content: center;
@@ -22,6 +21,7 @@
 }
 
 
+
 .title input {
     padding: 8px;
     border: none;
@@ -29,11 +29,7 @@
     outline: none;
 }
 .description, .viewDescription{
-
-    /*border-width: 1px;*/
-    /*border-style: solid;*/
-    /*border-color: rgba(255, 255, 255, 0.8);*/
-    background: rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.8);
     border-radius: 8px;
     margin-bottom: 1rem;
 }
@@ -47,7 +43,7 @@
     resize: none;
 
 }
-.description textarea {
+.description textarea, .title input {
     background-color: transparent;
 }
 
@@ -62,10 +58,6 @@
     margin-bottom: 16px;
     background: rgba(255,255,255,0.2);
     border-radius: 8px;
-    /*background-color: transparent;*/
-    /*border-width: 1px;*/
-    /*border-style: solid;*/
-    /*border-color: rgba(255, 255, 255, 0.5);*/
 }
 .newEntry ul li label, .viewDetails li, .edit ul li label{
     color: rgba(255, 255, 255, 0.8);
@@ -106,8 +98,8 @@
     position: absolute;
     top: -36px;
     left: -150%;
-    transition: left 0.3s ease; /* Simplified animation */
-    z-index: -1; /* Ensure it is behind the text */
+    transition: left 0.3s ease;
+    z-index: -1;
 }
 .editButton {
     display: flex;
