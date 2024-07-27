@@ -1,243 +1,230 @@
 .page {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    z-index: -20;
-    background:  #151427;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  z-index: -20;
+  background: #151427;
 }
 
 .landingPage {
-    text-align: center;
-    color: #fff;
-    position: relative;
-    z-index: 10;
+  text-align: center;
+  color: #fff;
+  position: relative;
+  z-index: 10;
 }
-
 
 /* ----------------Navbar -------------*/
 .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: #5a336e;
-    padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #5a336e;
+  padding: 1rem 2rem;
 }
 
 .logo {
-    font-size: 1.5rem;
-    font-weight: bold;
+  font-size: 1.5rem;
+  font-weight: bold;
 }
 
 .authButtons {
-    display: flex;
-    gap: 1rem;
+  display: flex;
+  gap: 1rem;
 }
 
-.loginButton{
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1rem;
-    background-color: #e8817f;
-    color: white;
+.loginButton {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 1rem;
+  cursor: pointer;
+  font-size: 1rem;
+  background-color: #e8817f;
+  color: white;
 }
 /* ----------------header -------------*/
 
-.header{
-    padding: 5rem 2rem;
-    width: 100%;
-    margin-bottom: 3.1rem;
+.header {
+  width: 100%;
+  padding: 10rem 5rem 5rem;
 }
 
-.header h1, .contacts h1{
-    font-size: 2.5rem;
-    animation-delay: 0.2s;
+.header h1,
+.contacts h1 {
+  font-size: 3rem;
+  font-weight: 800;
+  line-height: 1;
+  animation-delay: 0.2s;
+  padding: 1rem;
 }
 
 .header p {
-    font-size: 1.5rem;
-    animation-delay: 0.4s;
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-weight: 300;
+  animation-delay: 0.4s;
 }
 
-.hsb, .ctaButton{
-    position: absolute;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-weight: bold;
-    font-size: 1rem;
-    padding: 0.5rem 1rem;
-    cursor: pointer;
-    border-radius: 4px;
-    transition: font-size 0.3s  ease;
-    background-color: #c3727c;
-}
-
-.hsb {
-    top: 20rem;
-}
+.hsb,
 .ctaButton {
-    bottom: 32rem;
+  position: relative;
+  font-weight: bold;
+  max-width: fit-content;
+  margin: 2rem auto;
+  padding: 1rem 1rem;
+  cursor: pointer;
+  border-radius: 1rem;
+  transition: background-color 0.3s ease;
+  background-color: #c3727c;
 }
 
-.hsb:hover, .ctaButton:hover {
-    transition: font-size 0.3s  ease;
-    font-size: 1.3rem;
+.hsb:hover,
+.ctaButton:hover {
+  transition: background-color 0.3s ease;
+  background-color: #ba5964;
 }
 
-
-.featuresText, .arrow {
-    margin: 1rem;
-}
-    /* ---------------- arrow -------------*/
-
-.arrow {
-    font-size: 1.5rem;
-    animation: bounce 2s infinite;
-}
 /* ---------------- features -------------*/
 
-
 .tabTitles {
-    display: flex;
-    justify-content: space-around; /* Space the tabs evenly */
-    gap: 10px; /* Adjust the gap between tabs */
-    margin-bottom: 20px;
+  display: flex;
+  justify-content: space-around; /* Space the tabs evenly */
+  gap: 10px; /* Adjust the gap between tabs */
+  margin-bottom: 20px;
 }
 .tabLinks {
-    cursor: pointer;
-    padding: 10px;
-    border-bottom: 2px solid transparent;
-    transition: border-bottom 0.3s, color 0.3s;
-    user-select: none;
+  cursor: pointer;
+  padding: 10px;
+  border-bottom: 2px solid transparent;
+  transition: border-bottom 0.3s, color 0.3s;
+  user-select: none;
 }
 .activeLink {
-    border-bottom: 2px solid #c3727c; /* Change border color to #48bb78 */
-    color: #c3727c;
+  border-bottom: 2px solid #c3727c; /* Change border color to #48bb78 */
+  color: #c3727c;
 }
 
 .tabContents {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
 }
 .tabContent {
-    padding: 10px;
+  padding: 10px;
 }
 .image {
-    height: auto;
-    width: 800px;
-    margin:2rem;
-
+  height: auto;
+  width: 800px;
+  margin: 2rem;
 }
 
 .gettingStarted {
-    margin-bottom: 1rem;
+  margin-bottom: 1rem;
 }
 .secondaryContent {
-    padding: 3rem 2rem;
+  padding: 3rem 2rem;
 }
 
 .secondaryContent p {
-    font-size: 1.5rem;
-    margin-bottom: 5rem;
+  font-size: 1.5rem;
+  margin-bottom: 5rem;
 }
 
-
-
 .curves1 {
-    position: absolute;
-    top: 3%;
-    z-index: -10;
-    aspect-ratio: 960/300;
-    width: 100%;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-    pointer-events: none;
-    background-image: url("../components/icons/layer1.svg");
+  position: absolute;
+  top: 3%;
+  z-index: -10;
+  aspect-ratio: 960/300;
+  width: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  pointer-events: none;
+  background-image: url("../components/icons/layer1.svg");
 }
 
 .bubble {
-    border-bottom-left-radius: 50% 60%;
-    border-bottom-right-radius: 50% 60%;
-    position: absolute;
-    bottom: 25rem;
-    height: 15rem;
-    width: 100%;
-    background-color: #151427;
-    z-index: -5;
+  border-bottom-left-radius: 50% 60%;
+  border-bottom-right-radius: 50% 60%;
+  position: absolute;
+  bottom: 25rem;
+  height: 15rem;
+  width: 100%;
+  background-color: #151427;
+  z-index: -5;
 }
 
 .bubblebg {
-    background-color: #c3727c;
-    position: absolute;
-    bottom: 0;
-    height: 40rem;
-    z-index: -10;
-    width: 100%;
+  background-color: #c3727c;
+  position: absolute;
+  bottom: 0;
+  height: 40rem;
+  z-index: -10;
+  width: 100%;
 }
 
 .blur {
-    position: absolute;
-    height: 55%;
-    width: 90%;
-    background-image: radial-gradient(closest-side,  #5a336e,  rgba(0,0,0,0));
-    top: 45%;
-    left: 50%;
-    pointer-events: none;
-    transform: translate(-50%, -50%);
-    z-index: -5;
+  position: absolute;
+  height: 55%;
+  width: 90%;
+  background-image: radial-gradient(closest-side, #5a336e, rgba(0, 0, 0, 0));
+  top: 45%;
+  left: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  z-index: -5;
 }
 
 .pfp {
-    height: 8rem;
-    border-radius: 50% 50%;
-    margin-bottom: 1rem;
+  height: 8rem;
+  border-radius: 50% 50%;
+  margin-bottom: 1rem;
 }
-.contacts h1, .jhkim, .zlaud{
-    margin-bottom: 4rem;
+.contacts h1,
+.jhkim,
+.zlaud {
+  margin-bottom: 4rem;
 }
 
 .jhkim {
-    margin-right: 10rem;
+  margin-right: 10rem;
 }
-.jhkim, .zlaud {
-    text-align: left;
-    display: inline-block;
-    background: transparent;
-    color: #080708;
-    font-weight: bold;
-
+.jhkim,
+.zlaud {
+  text-align: left;
+  display: inline-block;
+  background: transparent;
+  color: #080708;
+  font-weight: bold;
 }
 
-.jhkim h2, .zlaud h2 {
-    font-size: 24px;
-    margin-bottom: 1rem;
+.jhkim h2,
+.zlaud h2 {
+  font-size: 24px;
+  margin-bottom: 1rem;
 }
 
 .fadeIn {
-    opacity: 0;
-    animation: fadeInUp 1s ease-out forwards;
+  opacity: 0;
+  animation: fadeInUp 1s ease-out forwards;
 }
 
-
 @keyframes fadeInUp {
-    0% {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes bounce {
-    0%, 100% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(10px);
-    }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(10px);
+  }
 }
