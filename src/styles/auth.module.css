@@ -1,92 +1,135 @@
 .page {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
 }
 
 .auth h1 {
-    font-size: 2rem;
-    margin-bottom: 2rem;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .logo {
-    position: absolute;
-    top: 0;
-    left: 0;
-    margin: 1rem;
-    font-size: 1.5rem;
-    font-weight: bold;
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 1rem;
+  font-size: 1.5rem;
+  font-weight: bold;
 }
 
 .page a {
-    position: absolute;
-    top: 0;
-    right: 0;
-    margin: 1rem;
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 1rem;
 }
 
 .auth {
-    position: relative;
-    z-index: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    border-radius: 8px;
-    width: 24rem;
-    padding: 2rem;
-    border-width: 2px;
-    border-style: solid;
-    border-color: rgba(255, 255, 255, 0.5);
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  width: 24rem;
+  padding: 2rem;
+  border-width: 2px;
+  border-style: solid;
+  border-color: rgba(255, 255, 255, 0.5);
 }
 
 .auth input {
-    background: rgba(255,255,255,0.2);
-    border-radius: 8px;
-    margin-bottom: 1rem;
-    width: 100%;
-    padding: 0.5rem;
-    z-index: 2;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  width: 100%;
+  padding: 0.5rem;
+  z-index: 2;
 }
 
 .auth input::placeholder {
-    color: #cccccc;
+  color: #cccccc;
 }
 
 .auth ul {
-    list-style: none;
-    padding: 1rem;
-    width: 100%;
+  list-style: none;
+  padding: 1rem;
+  width: 100%;
 }
-.auth li, .auth button {
-    margin-bottom: 10px;
+.auth li,
+.auth button {
+  margin-bottom: 10px;
 }
 
 .auth button {
-    padding: 0.5rem;
-    background-color: rgba(255,255,255,0.2);
-    border-radius: 16px;
-    cursor: pointer;
-    border: none;
-    color: white;
+  padding: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  cursor: pointer;
+  border: none;
+  color: white;
+  width: 75%;
 }
 .auth button:hover {
-    background-color: #e8817f;
+  background-color: #e8817f;
+}
+
+.auth a {
+  position: relative;
 }
 
 .eMsg {
-    color: #ff5f5f;
-    margin-bottom: 10px;
-    animation: horizontal-shaking 0.2s;
-    text-shadow: 0 0 1px #ff5f5f;
+  color: #ff5f5f;
+  margin-bottom: 1rem;
+  text-align: center;
+  animation: horizontal-shaking 0.2s;
+  text-shadow: 0 0 1px #ff5f5f;
+}
+
+.signup {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 1rem;
+}
+
+.signup a {
+  position: relative;
+  padding: 0;
+  margin: 0;
+  text-decoration: underline;
+}
+
+.name {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.name li {
+  margin-bottom: 0;
 }
 
 @keyframes horizontal-shaking {
-    0% { transform: translateX(0) }
-    25% { transform: translateX(5px) }
-    50% { transform: translateX(-5px) }
-    75% { transform: translateX(5px) }
-    100% { transform: translateX(0) }
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(5px);
+  }
+  50% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
+  100% {
+    transform: translateX(0);
+  }
 }

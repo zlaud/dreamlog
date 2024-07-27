@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "@/styles/globals.css";
 
-import { Karla as FontSans } from "next/font/google";
+import { Inter as FontSans } from "next/font/google";
 
 import { cn } from "@/lib/utils";
 
@@ -20,7 +20,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
   return (
     <html lang="en">
       <body
