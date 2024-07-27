@@ -2,10 +2,9 @@ const BGCloud1 = ({className}) => (
     <svg className={className} id="Layer_1" data-name="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 396.19 182.36">
         <defs>
             <style>
-                {`.cloud-cls-1 { opacity: .8; } 
+                {`.cloud-cls-1 { opacity: .9; } 
                 .cloud-cls-1, 
-                .cloud-cls-2 { fill: #a18248; stroke-width: 0px; }
-                .cloud-cls-2 { opacity: .9;}`
+                .cloud-cls-2 { fill: #d4d4d4; stroke-width: 0px; }`
                 }
             </style>
         </defs>

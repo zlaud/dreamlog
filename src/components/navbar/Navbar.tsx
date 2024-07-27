@@ -41,7 +41,7 @@ export const Navbar = () => {
               <div className={styles.logo}>
                 <span>Dream Log</span>
               </div>
-              <button className={styles.menuButton} onClick={toggleSidebar}>
+              <button className="hidden md:block" onClick={toggleSidebar}>
                 <Menu />
               </button>
             </div>

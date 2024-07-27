@@ -41,3 +41,12 @@
     width: 512px;
     opacity: 0.9;
 }
+
+@media (max-width: 768px) {
+    .bgcloud {
+        display: none;
+    }
+    .stars {
+        display: none;
+    }
+}
