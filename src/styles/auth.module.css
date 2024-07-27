@@ -8,7 +8,7 @@
 
 .auth h1 {
   font-size: 1.5rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .logo {
@@ -84,7 +84,7 @@
 
 .eMsg {
   color: #ff5f5f;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   text-align: center;
   animation: horizontal-shaking 0.2s;
   text-shadow: 0 0 1px #ff5f5f;
@@ -104,6 +104,16 @@
   padding: 0;
   margin: 0;
   text-decoration: underline;
+}
+
+.name {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.name li {
+  margin-bottom: 0;
 }
 
 @keyframes horizontal-shaking {

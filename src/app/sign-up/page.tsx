@@ -12,7 +12,6 @@ import Link from "next/link";
 const Signup = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [displayName, setDisplayName] = useState<string>("");
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
@@ -22,7 +21,6 @@ const Signup = () => {
   const emailRef = useRef<HTMLInputElement>(null);
   const firstNameRef = useRef<HTMLInputElement>(null);
   const lastNameRef = useRef<HTMLInputElement>(null);
-  const displayNameRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
 
   const handleSignUp = async () => {
@@ -31,18 +29,23 @@ const Signup = () => {
     setError(null);
 
     try {
-      if (!email || !password || !firstName || !lastName || !displayName) {
-        throw new Error("All fields are required");
+      if (!email || !password || !firstName || !lastName) {
+        throw new Error("All fields are required.");
       }
 
-      if (password.length < 6) {
-        throw new Error("Password must be at least 6 characters");
+      const isValidEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
+      if (!email.match(isValidEmail)) {
+        throw new Error("Invalid email address.");
+      }
+
+      if (password.length < 8) {
+        throw new Error("Password must be at least 8 characters.");
       }
 
       const userCredential = await createUserWithEmailAndPassword(
-          auth,
-          email,
-          password
+        auth,
+        email,
+        password
       );
 
       const user = userCredential?.user;
@@ -53,7 +56,6 @@ const Signup = () => {
           firstName,
           lastName,
           email,
-          displayName,
           uid: user.uid,
           totalLogs: 0,
           currentStreak: 0,
@@ -65,7 +67,6 @@ const Signup = () => {
         setPassword("");
         setFirstName("");
         setLastName("");
-        setDisplayName("");
 
         router.push("/logs");
       }
@@ -81,7 +82,10 @@ const Signup = () => {
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, nextInputRef?: React.RefObject<HTMLInputElement>) => {
+  const handleKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    nextInputRef?: React.RefObject<HTMLInputElement>
+  ) => {
     if (e.key === "Enter") {
       if (nextInputRef && nextInputRef.current) {
         nextInputRef.current.focus();
@@ -92,61 +96,55 @@ const Signup = () => {
   };
 
   return (
-      <div className={styles.page}>
-        <span className={styles.logo}>DreamLog</span>
-        <Link href={"/"}> {"<-"} Back to Landing Page</Link>
+    <div className={styles.page}>
+      <span className={styles.logo}>DreamLog</span>
+      <Link href={"/"}> {"<-"} Back to Landing Page</Link>
+      <div className="flex-col">
         <div className={styles.auth}>
           <h1>Sign Up</h1>
           {error && <p className={styles.eMsg}>{error}</p>}
           <ul>
-            <li>
-              <Input
-                  type="email"
-                  placeholder="Email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  ref={emailRef}
-                  onKeyDown={(e) => handleKeyDown(e, firstNameRef)}
-              />
-            </li>
-            <li>
-              <Input
+            <div className={styles.name}>
+              <li>
+                <Input
                   type="text"
                   placeholder="First Name"
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
                   ref={firstNameRef}
                   onKeyDown={(e) => handleKeyDown(e, lastNameRef)}
-              />
-            </li>
-            <li>
-              <Input
+                />
+              </li>
+              <li>
+                <Input
                   type="text"
                   placeholder="Last Name"
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
                   ref={lastNameRef}
-                  onKeyDown={(e) => handleKeyDown(e, displayNameRef)}
+                  onKeyDown={(e) => handleKeyDown(e, emailRef)}
+                />
+              </li>
+            </div>
+
+            <li>
+              <Input
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                ref={emailRef}
+                onKeyDown={(e) => handleKeyDown(e, passwordRef)}
               />
             </li>
             <li>
               <Input
-                  type="text"
-                  placeholder="Display Name"
-                  value={displayName}
-                  onChange={(e) => setDisplayName(e.target.value)}
-                  ref={displayNameRef}
-                  onKeyDown={(e) => handleKeyDown(e, passwordRef)}
-              />
-            </li>
-            <li>
-              <Input
-                  type="password"
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  ref={passwordRef}
-                  onKeyDown={(e) => handleKeyDown(e)}
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                ref={passwordRef}
+                onKeyDown={(e) => handleKeyDown(e)}
               />
             </li>
           </ul>
@@ -154,7 +152,12 @@ const Signup = () => {
             {loading ? "Signing Up..." : "Sign Up"}
           </Button>
         </div>
+        <div className={styles.signup}>
+          <p>Already have an account?</p>
+          <Link href={"/login"}> Log in</Link>
+        </div>
       </div>
+    </div>
   );
 };
 
