@@ -84,12 +84,13 @@
     flex-direction: row;
     align-items: flex-start;
 }
-.topright button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-left: 1rem;
-}
+/*.topright button {*/
+/*    display: flex;*/
+/*    justify-content: center;*/
+/*    align-items: center;*/
+/*    margin-left: 1rem;*/
+/*}*/
+
 .peoplePlaces {
     white-space: nowrap;
     overflow: hidden;
@@ -161,4 +162,19 @@
 
 .sortButton {
     float: right;
+}
+
+@media (max-width: 768px) {
+    .page >* {
+        font-size: 24px;
+    }
+    .top {
+        display: inline;
+    }
+    .top > *{
+        flex-direction: column;
+    }
+    .filterInputs {
+        display: block; /* Always show on medium screens and up */
+    }
 }

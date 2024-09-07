@@ -122,7 +122,6 @@ const Logs = () => {
                   onChange={(e) => handleSearch(e.target.value)}
               />
               <button
-                  className={styles.sortButton}
                   onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
               >
                 Sort by {sortOrder === "asc" ? "newest" : "oldest"}
@@ -150,7 +149,7 @@ const Logs = () => {
                 )}
               </div>
               <button
-                  className={styles.filterButton}
+                  className="hidden md:block"
                   onClick={() => setShowFilters(!showFilters)}
               >
                 <Filter />

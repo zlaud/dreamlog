@@ -36,7 +36,6 @@ export const Navbar = () => {
             }`}
         >
           <div className={styles.flex}>
-
             <div className={styles.top}>
               <div className={styles.logo}>
                 <span>Dream Log</span>

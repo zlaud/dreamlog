@@ -143,3 +143,15 @@
 .description::placeholder {
     background: #546bab ;
 }
+
+
+@media (max-width: 768px) {
+    .newEntry {
+        flex: 1;
+    }
+
+    .newEntry >* {
+        font-size: 26px;
+    }
+
+}
